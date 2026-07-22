@@ -1,69 +1,85 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2'; 
 
 const AddContact = () => {
-    const [contact, setContact] = useState({
-        firstName: "",
-        lastName: "", 
-        title: "Mr",
-        emails: [{ emailAddress: "" }],      
-        phones: [{ phoneNumber: "", label: "Mobile" }] 
-    });
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState(''); 
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
 
-    const handleFirstNameChange = (e) => {
-        setContact({ ...contact, firstName: e.target.value });
-    };
+    const handleSave = async (e) => {
+        e.preventDefault(); 
+        const phoneRegex = /^03\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Phone Number',
+                text: 'Please enter a valid 11-digit Pakistani phone number starting with "03" (e.g., 03001234567).',
+            });
+            return; 
+        }
+        const newContact = {
+            firstName: firstName,
+            lastName: lastName,
+            emails: [{ emailAddress: email }],
+            phones: [{ phoneNumber: phone }]
+        };
 
-    const handleEmailChange = (e) => {
-    setContact({ ...contact, emails: [{ emailAddress: e.target.value }] });
-};
-
-    const handlePhoneChange = (e) => {
-        setContact({ ...contact, phones: [{ phoneNumber: e.target.value, label: "Mobile" }] });
-    };
-
-    const saveContact = async (e) => {
-        e.preventDefault();
         try {
-            await axios.post("http://localhost:8080/users/8/contacts", contact);
-            alert("Contact successfully save ho gaya!");
-            window.location.reload();
+            await axios.post("http://localhost:8080/users/17/contacts", newContact);
+            
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setPhone('');
+            
+            await Swal.fire({
+                icon: 'success',
+                title: 'Saved Successfully!',
+                text: 'Your new contact has been successfully added to the list.',
+                timer: 2000, 
+                showConfirmButton: false
+            });
+
+            window.location.reload(); 
         } catch (error) {
-            console.error("Data save karne mein masla aaya:", error);
-            alert("Error! Backend check karein.");
+            console.error("Save karne mein error aaya:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Could not connect to the backend server. Please try again later.'
+            });
         }
     };
 
     return (
-        <div className="container mt-4 mb-4">
-            <div className="card shadow">
-                <div className="card-header bg-primary text-white">
-                    <h4 className="mb-0">Add New Contact</h4>
-                </div>
-                <div className="card-body">
-                    <form onSubmit={saveContact}>
-                        <div className="row">
-                            <div className="col-md-4 mb-3">
-                                <input type="text" className="form-control" 
-                                       placeholder="Enter Name" required 
-                                       value={contact.firstName} onChange={handleFirstNameChange} />
-                            </div>
-                           <div className="col-md-4 mb-3">
-                              <input type="email" className="form-control" 
-                               placeholder="Enter Email" required 
-                                value={contact.emails[0].emailAddress} onChange={handleEmailChange} />
-                             </div>
-                            <div className="col-md-3 mb-3">
-                                <input type="text" className="form-control" 
-                                       placeholder="Enter Phone" required 
-                                       value={contact.phones[0].phoneNumber} onChange={handlePhoneChange} />
-                            </div>
-                            <div className="col-md-1 mb-3">
-                                <button type="submit" className="btn btn-success w-100">Save</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <div className="card shadow mb-4 border-0">
+            <div className="card-header bg-primary text-white text-center font-weight-bold">
+                <h5 className="mb-0">Add New Contact</h5>
+            </div>
+            <div className="card-body bg-light">
+                <form onSubmit={handleSave} className="row g-2 align-items-center">
+                    <div className="col-md-3">
+                        <input type="text" className="form-control" placeholder="First Name" 
+                            value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+                    </div>
+                    <div className="col-md-2">
+                        <input type="text" className="form-control" placeholder="Last Name" 
+                            value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                    </div>
+                    <div className="col-md-3">
+                        <input type="email" className="form-control" placeholder="Enter Email" 
+                            value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    </div>
+                    <div className="col-md-3">
+                        <input type="text" className="form-control" placeholder="Enter Phone" 
+                            value={phone} onChange={(e) => setPhone(e.target.value)} required />
+                    </div>
+                    <div className="col-md-1">
+                        <button type="submit" className="btn btn-success w-100 fw-bold shadow-sm">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     );

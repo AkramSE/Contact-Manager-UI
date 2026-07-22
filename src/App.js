@@ -1,18 +1,22 @@
-import './App.css';
-import ContactList from './components/ContactList';
-import AddContact from './components/AddContact'; // Naya form import kiya
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import AddContact from './components/AddContact'; // Form ko import kar rahe hain
+import ContactList from './components/ContactList'; // Table ko import kar rahe hain
 
 function App() {
   return (
-    <div className="App bg-light" style={{ minHeight: '100vh', padding: '20px' }}>
-      <h1 className="text-center mt-3 fw-bold">My Contact Manager</h1>
+    <div className="container mt-5">
+      <h1 className="text-center mb-4 fw-bold text-dark">My Contact Manager</h1>
       
-      {/* Pehle Form dikhayega */}
-      <AddContact />
+      {/* 1. Yahan sirf ek baar Form dikhega */}
+      <div className="mb-5">
+        <AddContact /> 
+      </div>
       
-      {/* Phir Table dikhayega */}
-      <ContactList />
-      
+      {/* 2. Yahan sirf ek baar Table aur Search dikhega */}
+      <div>
+        <ContactList />
+      </div>
     </div>
   );
 }
