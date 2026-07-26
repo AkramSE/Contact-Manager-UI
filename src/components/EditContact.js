@@ -1,77 +1,158 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
-    // 1. State variables banayein, jin mein purana data pehle se set ho
-    const [firstName, setFirstName] = useState(contactToEdit.firstName || '');
-    const [lastName, setLastName] = useState(contactToEdit.lastName || '');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+    const [formData, setFormData] = useState({
+        title: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: ''
+    });
+    
+    const [isLoading, setIsLoading] = useState(false);
 
-    // Jab component load ho, to pehla email aur phone set karein
     useEffect(() => {
-        if (contactToEdit.emails && contactToEdit.emails.length > 0) {
-            setEmail(contactToEdit.emails[0].emailAddress);
+        let initialEmail = '';
+        let initialPhone = '';
+        
+        if (contactToEdit?.emails && contactToEdit.emails.length > 0) {
+            initialEmail = contactToEdit.emails[0].emailAddress;
         }
-        if (contactToEdit.phones && contactToEdit.phones.length > 0) {
-            setPhone(contactToEdit.phones[0].phoneNumber);
+        if (contactToEdit?.phones && contactToEdit.phones.length > 0) {
+            initialPhone = contactToEdit.phones[0].phoneNumber;
         }
+
+        setFormData({
+            title: contactToEdit?.title || '',
+            firstName: contactToEdit?.firstName || '',
+            lastName: contactToEdit?.lastName || '',
+            email: initialEmail,
+            phone: initialPhone
+        });
     }, [contactToEdit]);
 
-    // 2. Data update karne ka function (Backend ko PUT request)
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const handleUpdate = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
-        // Backend ke mutabiq object banayein
         const updatedContact = {
-            firstName: firstName,
-            lastName: lastName,
-            emails: [{ emailAddress: email }],
-            phones: [{ phoneNumber: phone }]
+            title: formData.title,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            emails: [{ emailAddress: formData.email, emailType: "Personal" }],
+            phones: [{ phoneNumber: formData.phone, phoneType: "Mobile" }]
         };
 
         try {
-            // Yahan hum PUT request bhej rahe hain
-            await axios.put(`http://localhost:8080/users/8/contacts/${contactToEdit.id}`, updatedContact);
-            
-            // Jab update ho jaye, toh main list ko refresh karne ka function call karein
+            const token = localStorage.getItem("jwtToken");
+            const userId = localStorage.getItem("userId");
+
+            await axios.put(`http://localhost:8080/users/${userId}/contacts/${contactToEdit.id}`, updatedContact, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Updated!',
+                text: 'Contact details have been updated successfully. 🎉',
+                timer: 2000,
+                showConfirmButton: false
+            });
+
             onUpdateSuccess();
         } catch (error) {
-            console.error("Update karne mein error aaya:", error);
+            console.error("Update error:", error);
+            Swal.fire('Error!', 'Failed to update contact. Please try again.', 'error');
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    if (!contactToEdit) return null;
+
     return (
-        <div className="card mt-3 shadow-sm border-primary">
-            <div className="card-header bg-primary text-white">
-                Edit Contact
-            </div>
-            <div className="card-body">
-                <form onSubmit={handleUpdate}>
-                    <div className="row mb-3">
-                        <div className="col">
-                            <input type="text" className="form-control" placeholder="First Name" 
-                                value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+        <>
+            {/* Modal Overlay / Backdrop */}
+            <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1040 }}></div>
+            
+            {/* Modal Content */}
+            <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ zIndex: 1050 }}>
+                <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div className="modal-content shadow-lg border-0 rounded-4">
+                        
+                        {/* Premium Gradient Header */}
+                        <div className="modal-header text-white rounded-top-4 py-3" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', borderBottom: 'none' }}>
+                            <h4 className="modal-title fw-bold m-0 d-flex align-items-center">
+                                <span className="me-2">✏️</span> Update Contact
+                            </h4>
+                            <button type="button" className="btn-close btn-close-white shadow-none" onClick={onCancel} aria-label="Close"></button>
                         </div>
-                        <div className="col">
-                            <input type="text" className="form-control" placeholder="Last Name" 
-                                value={lastName} onChange={(e) => setLastName(e.target.value)} />
+
+                        {/* Modal Body (Form) */}
+                        <div className="modal-body p-4 bg-light">
+                            <form onSubmit={handleUpdate}>
+                                <div className="row g-3">
+                                    <div className="col-md-4 mb-2">
+                                        <label className="form-label fw-semibold text-secondary small">Title</label>
+                                        <select 
+                                            className="form-select border-0 shadow-sm" 
+                                            name="title" 
+                                            value={formData.title} 
+                                            onChange={handleChange}
+                                            style={{ borderRadius: '8px' }}
+                                        >
+                                            <option value="">Select...</option>
+                                            <option value="Mr">Mr.</option>
+                                            <option value="Ms">Ms.</option>
+                                            <option value="Dr">Dr.</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div className="col-md-4 mb-2">
+                                        <label className="form-label fw-semibold text-secondary small">First Name *</label>
+                                        <input type="text" className="form-control border-0 shadow-sm" name="firstName" value={formData.firstName} onChange={handleChange} required style={{ borderRadius: '8px' }} />
+                                    </div>
+
+                                    <div className="col-md-4 mb-2">
+                                        <label className="form-label fw-semibold text-secondary small">Last Name *</label>
+                                        <input type="text" className="form-control border-0 shadow-sm" name="lastName" value={formData.lastName} onChange={handleChange} required style={{ borderRadius: '8px' }} />
+                                    </div>
+
+                                    <div className="col-md-6 mb-2">
+                                        <label className="form-label fw-semibold text-secondary small">Email Address *</label>
+                                        <input type="email" className="form-control border-0 shadow-sm" name="email" value={formData.email} onChange={handleChange} required placeholder="e.g. work@example.com" style={{ borderRadius: '8px' }} />
+                                    </div>
+
+                                    <div className="col-md-6 mb-2">
+                                        <label className="form-label fw-semibold text-secondary small">Phone Number *</label>
+                                        <input type="tel" className="form-control border-0 shadow-sm" name="phone" value={formData.phone} onChange={handleChange} required placeholder="e.g. 03001234567" style={{ borderRadius: '8px' }} />
+                                    </div>
+                                </div>
+
+                                {/* Modal Footer / Actions */}
+                                <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                                    <button type="button" className="btn btn-outline-secondary px-4 fw-bold" onClick={onCancel} disabled={isLoading} style={{ borderRadius: '8px' }}>
+                                        Cancel
+                                    </button>
+                                    <button type="submit" className="btn text-white px-4 fw-bold shadow-sm" disabled={isLoading} style={{ borderRadius: '8px', background: '#2a5298', border: 'none', transition: 'all 0.3s ease' }}>
+                                        {isLoading ? 'Updating...' : 'Update Details'}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <div className="mb-3">
-                        <input type="email" className="form-control" placeholder="Email Address" 
-                            value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    </div>
-                    <div className="mb-3">
-                        <input type="text" className="form-control" placeholder="Phone Number" 
-                            value={phone} onChange={(e) => setPhone(e.target.value)} required />
-                    </div>
-                    
-                    <button type="submit" className="btn btn-success me-2">Save Changes</button>
-                    <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancel</button>
-                </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

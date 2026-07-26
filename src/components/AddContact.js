@@ -1,86 +1,155 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2'; 
+import Swal from 'sweetalert2';
 
 const AddContact = () => {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState(''); 
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    
+    const [formData, setFormData] = useState({
+        title: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: ''
+    });
+    
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSave = async (e) => {
-        e.preventDefault(); 
-        const phoneRegex = /^03\d{9}$/;
-        if (!phoneRegex.test(phone)) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Invalid Phone Number',
-                text: 'Please enter a valid 11-digit Pakistani phone number starting with "03" (e.g., 03001234567).',
-            });
-            return; 
-        }
-        const newContact = {
-            firstName: firstName,
-            lastName: lastName,
-            emails: [{ emailAddress: email }],
-            phones: [{ phoneNumber: phone }]
-        };
+    const handleOpen = () => setShowModal(true);
+    const handleClose = () => {
+        setShowModal(false);
+        setFormData({ title: '', firstName: '', lastName: '', email: '', phone: '' });
+    };
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
 
         try {
-            await axios.post("http://localhost:8080/users/17/contacts", newContact);
+            const token = localStorage.getItem("jwtToken");
+            const userId = localStorage.getItem("userId"); 
             
-            setFirstName('');
-            setLastName('');
-            setEmail('');
-            setPhone('');
-            
-            await Swal.fire({
+            // Format form data payload to match backend schema specifications. 
+            const formattedData = {
+                title: formData.title,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                // Map raw email values into an array of objects. 
+                emails: [
+                    { emailAddress: formData.email, emailType: "Personal" }
+                ],
+                // Map raw phone values into an array of objects. 
+                phones: [
+                    { phoneNumber: formData.phone, phoneType: "Mobile" }
+                ]
+            };
+
+            await axios.post(`http://localhost:8080/users/${userId}/contacts`, formattedData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            Swal.fire({
                 icon: 'success',
-                title: 'Saved Successfully!',
-                text: 'Your new contact has been successfully added to the list.',
-                timer: 2000, 
+                title: 'Created!',
+                text: 'New contact has been added successfully.',
+                timer: 1500,
                 showConfirmButton: false
             });
 
-            window.location.reload(); 
+            handleClose(); 
+            setTimeout(() => { window.location.reload(); }, 1500);
+
         } catch (error) {
-            console.error("Save karne mein error aaya:", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Could not connect to the backend server. Please try again later.'
-            });
+            console.error("Error adding contact", error);
+            Swal.fire('Error!', 'Failed to add contact. Please try again.', 'error');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div className="card shadow mb-4 border-0">
-            <div className="card-header bg-primary text-white text-center font-weight-bold">
-                <h5 className="mb-0">Add New Contact</h5>
+        <div className="mb-4">
+            <div className="d-flex justify-content-end">
+                <button 
+                    onClick={handleOpen} 
+                    className="btn btn-primary shadow-sm fw-bold d-flex align-items-center px-4 py-2"
+                    style={{ borderRadius: '10px', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', border: 'none' }}
+                >
+                    <span className="me-2 fs-5">+</span> Create New Contact
+                </button>
             </div>
-            <div className="card-body bg-light">
-                <form onSubmit={handleSave} className="row g-2 align-items-center">
-                    <div className="col-md-3">
-                        <input type="text" className="form-control" placeholder="First Name" 
-                            value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+
+            {showModal && (
+                <>
+                    <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}></div>
+                    
+                    <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+                        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+                            <div className="modal-content shadow-lg border-0 rounded-4">
+                                
+                                <div className="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                                    <h4 className="modal-title fw-bold text-primary">
+                                        <span className="me-2">👤</span> Add New Contact
+                                    </h4>
+                                    <button type="button" className="btn-close shadow-none" onClick={handleClose} aria-label="Close"></button>
+                                </div>
+
+                                <div className="modal-body p-4">
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="row g-3">
+                                            <div className="col-md-4">
+                                                <label className="form-label fw-semibold text-secondary small">Title</label>
+                                                <select className="form-select bg-light border-0 shadow-none" name="title" value={formData.title} onChange={handleChange}>
+                                                    <option value="">Select...</option>
+                                                    <option value="Mr">Mr.</option>
+                                                    <option value="Ms">Ms.</option>
+                                                    <option value="Dr">Dr.</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div className="col-md-4">
+                                                <label className="form-label fw-semibold text-secondary small">First Name *</label>
+                                                <input type="text" className="form-control bg-light border-0 shadow-none" name="firstName" value={formData.firstName} onChange={handleChange} required />
+                                            </div>
+
+                                            <div className="col-md-4">
+                                                <label className="form-label fw-semibold text-secondary small">Last Name *</label>
+                                                <input type="text" className="form-control bg-light border-0 shadow-none" name="lastName" value={formData.lastName} onChange={handleChange} required />
+                                            </div>
+
+                                            <div className="col-md-6 mt-4">
+                                                <label className="form-label fw-semibold text-secondary small">Email Address *</label>
+                                                <input type="email" className="form-control bg-light border-0 shadow-none" name="email" value={formData.email} onChange={handleChange} required placeholder="e.g. work@example.com" />
+                                            </div>
+
+                                            <div className="col-md-6 mt-4">
+                                                <label className="form-label fw-semibold text-secondary small">Phone Number *</label>
+                                                <input type="tel" className="form-control bg-light border-0 shadow-none" name="phone" value={formData.phone} onChange={handleChange} required placeholder="e.g. 03001234567" />
+                                            </div>
+                                        </div>
+
+                                        <div className="d-flex justify-content-end mt-5 pt-3 border-top">
+                                            <button type="button" className="btn btn-light me-2 px-4 fw-bold" onClick={handleClose}>
+                                                Cancel
+                                            </button>
+                                            <button type="submit" className="btn btn-primary px-4 fw-bold" disabled={isLoading} style={{ background: '#1e3c72', border: 'none' }}>
+                                                {isLoading ? 'Saving...' : 'Save Contact'}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-md-2">
-                        <input type="text" className="form-control" placeholder="Last Name" 
-                            value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    </div>
-                    <div className="col-md-3">
-                        <input type="email" className="form-control" placeholder="Enter Email" 
-                            value={email} onChange={(e) => setEmail(e.target.value)} required />
-                    </div>
-                    <div className="col-md-3">
-                        <input type="text" className="form-control" placeholder="Enter Phone" 
-                            value={phone} onChange={(e) => setPhone(e.target.value)} required />
-                    </div>
-                    <div className="col-md-1">
-                        <button type="submit" className="btn btn-success w-100 fw-bold shadow-sm">Save</button>
-                    </div>
-                </form>
-            </div>
+                </>
+            )}
         </div>
     );
 };
