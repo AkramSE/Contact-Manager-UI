@@ -33,18 +33,16 @@ const AddContact = () => {
             const token = localStorage.getItem("jwtToken");
             const userId = localStorage.getItem("userId"); 
             
-            // Format form data payload to match backend schema specifications. 
+            // Fixed field mapping to align with backend entity classes
             const formattedData = {
                 title: formData.title,
                 firstName: formData.firstName,
                 lastName: formData.lastName,
-                // Map raw email values into an array of objects. 
                 emails: [
-                    { emailAddress: formData.email, emailType: "Personal" }
+                    { emailAddress: formData.email, label: "Personal" }
                 ],
-                // Map raw phone values into an array of objects. 
                 phones: [
-                    { phoneNumber: formData.phone, phoneType: "Mobile" }
+                    { phoneNumber: formData.phone, label: "Mobile" }
                 ]
             };
 
@@ -108,9 +106,9 @@ const AddContact = () => {
                                                 <label className="form-label fw-semibold text-secondary small">Title</label>
                                                 <select className="form-select bg-light border-0 shadow-none" name="title" value={formData.title} onChange={handleChange}>
                                                     <option value="">Select...</option>
-                                                    <option value="Mr">Mr.</option>
-                                                    <option value="Ms">Ms.</option>
-                                                    <option value="Dr">Dr.</option>
+                                                    <option value="Mr.">Mr.</option>
+                                                    <option value="Ms.">Ms.</option>
+                                                    <option value="Dr.">Dr.</option>
                                                 </select>
                                             </div>
                                             

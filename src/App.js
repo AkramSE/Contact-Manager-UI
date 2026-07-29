@@ -1,24 +1,23 @@
-import React, { useState } from 'react'; // useState import kiya hai Modal control karne ke liye
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'; // Link nikal diya hai
+import React from 'react'; 
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AddContact from './components/AddContact';
 import ContactList from './components/ContactList';
 import Login from './components/Login';
 import Register from './components/Register';
-import ChangePassword from './components/ChangePassword';
+import UserProfile from './components/UserProfile';
 
 function App() {
   const token = localStorage.getItem("jwtToken");
 
   const handleLogout = () => {
     localStorage.removeItem("jwtToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("email");
     window.location.href = '/login';
   };
 
   const Dashboard = () => {
-    // Modal state for Change Password
-    const [showPasswordModal, setShowPasswordModal] = useState(false);
-
     return (
       <div style={{ backgroundColor: '#f4f7f6', minHeight: '100vh', paddingBottom: '50px' }}>
 
@@ -35,14 +34,14 @@ function App() {
                 ● Authenticated Session
               </span>
 
-              {/* Rendered as a button to control modal visibility. */}
-              <button
-                onClick={() => setShowPasswordModal(true)}
+              {/* Profile Button */}
+              <Link
+                to="/profile"
                 className="btn btn-sm btn-outline-light me-3 fw-bold rounded-pill px-3 d-flex align-items-center"
-                style={{ transition: 'all 0.3s ease' }}
+                style={{ transition: 'all 0.3s ease', textDecoration: 'none' }}
               >
-                <span className="me-1">🔑</span> Change Password
-              </button>
+                <span className="me-1">👤</span> My Profile
+              </Link>
 
               <button
                 className="btn btn-sm fw-bold text-white shadow d-flex align-items-center"
@@ -70,13 +69,6 @@ function App() {
             <ContactList />
           </div>
         </div>
-
-        {/* Yahan hum ChangePassword Modal component render kar rahe hain */}
-        <ChangePassword
-          showModal={showPasswordModal}
-          onClose={() => setShowPasswordModal(false)}
-        />
-
       </div>
     );
   };
@@ -87,8 +79,11 @@ function App() {
         <Route path="/login" element={token ? <Navigate to="/contacts" /> : <Login />} />
         <Route path="/register" element={token ? <Navigate to="/contacts" /> : <Register />} />
 
-        {/* The change password route was removed; it now opens exclusively as a modal on the dashboard. */} 
+        {/* Dashboard Route */}
         <Route path="/contacts" element={token ? <Dashboard /> : <Navigate to="/login" />} />
+        
+        {/* Profile Route */}
+        <Route path="/profile" element={token ? <UserProfile /> : <Navigate to="/login" />} />
 
         <Route path="*" element={<Navigate to={token ? "/contacts" : "/login"} />} />
       </Routes>

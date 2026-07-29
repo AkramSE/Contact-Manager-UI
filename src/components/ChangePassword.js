@@ -9,27 +9,23 @@ const ChangePassword = ({ showModal, onClose }) => {
     const [errorMsg, setErrorMsg] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    // Return null if showModal state is false. 
     if (!showModal) return null;
 
     const handleChangePassword = async (e) => {
         e.preventDefault();
         setErrorMsg('');
 
-        // 1. Validate if the new password matches the confirm password. 
         if (newPassword !== confirmPassword) {
-            setErrorMsg("New Password and Confirm Password do not match.!");
+            setErrorMsg("New Password and Confirm Password do not match!");
             return;
         }
 
         setIsLoading(true);
 
-        // 2. Extract JWT token and user ID from localStorage. 
         const token = localStorage.getItem("jwtToken");
         const userId = localStorage.getItem("userId");
 
         try {
-            // 3. Send HTTP PUT request to backend change password API. 
             await axios.put(`http://localhost:8080/users/${userId}/change-password`, 
             {
                 oldPassword: oldPassword,
@@ -41,7 +37,6 @@ const ChangePassword = ({ showModal, onClose }) => {
                 }
             });
 
-            // Display success notification modal. 
             Swal.fire({
                 icon: 'success',
                 title: 'Updated!',
@@ -50,12 +45,10 @@ const ChangePassword = ({ showModal, onClose }) => {
                 showConfirmButton: false
             });
 
-            // Reset form state fields. 
             setOldPassword('');
             setNewPassword('');
             setConfirmPassword('');
             
-            // Close modal display. 
             onClose();
 
         } catch (error) {
@@ -68,15 +61,12 @@ const ChangePassword = ({ showModal, onClose }) => {
 
     return (
         <>
-            {/* Modal Overlay / Backdrop */}
             <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1040 }}></div>
             
-            {/* Modal Content */}
             <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ zIndex: 1050 }}>
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content shadow-lg border-0 rounded-4">
                         
-                        {/* Modal Header */}
                         <div className="modal-header text-white rounded-top-4 py-3" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', borderBottom: 'none' }}>
                             <h4 className="modal-title fw-bold m-0 d-flex align-items-center">
                                 <span className="me-2">🔑</span> Change Password
@@ -84,7 +74,6 @@ const ChangePassword = ({ showModal, onClose }) => {
                             <button type="button" className="btn-close btn-close-white shadow-none" onClick={onClose} aria-label="Close"></button>
                         </div>
 
-                        {/* Modal Body */}
                         <div className="modal-body p-4 bg-light">
                             {errorMsg && (
                                 <div className="alert alert-danger fw-medium py-2" style={{ borderRadius: '8px', fontSize: '0.9rem' }}>
@@ -150,9 +139,8 @@ const ChangePassword = ({ showModal, onClose }) => {
                                         disabled={isLoading}
                                         style={{ 
                                             borderRadius: '8px', 
-                                            background: '#2a5298', 
-                                            border: 'none',
-                                            transition: 'all 0.3s ease'
+                                            background: '#2a5298',
+                                            border: 'none'
                                         }}
                                     >
                                         {isLoading ? 'Updating...' : 'Update Password'}

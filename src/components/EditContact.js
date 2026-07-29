@@ -45,8 +45,9 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
             title: formData.title,
             firstName: formData.firstName,
             lastName: formData.lastName,
-            emails: [{ emailAddress: formData.email, emailType: "Personal" }],
-            phones: [{ phoneNumber: formData.phone, phoneType: "Mobile" }]
+            // Changed from emailType/phoneType to 'label'
+            emails: [{ emailAddress: formData.email, label: "Personal" }],
+            phones: [{ phoneNumber: formData.phone, label: "Mobile" }]
         };
 
         try {
@@ -81,15 +82,12 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
 
     return (
         <>
-            {/* Modal Overlay / Backdrop */}
             <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1040 }}></div>
             
-            {/* Modal Content */}
             <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ zIndex: 1050 }}>
                 <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div className="modal-content shadow-lg border-0 rounded-4">
                         
-                        {/* Premium Gradient Header */}
                         <div className="modal-header text-white rounded-top-4 py-3" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', borderBottom: 'none' }}>
                             <h4 className="modal-title fw-bold m-0 d-flex align-items-center">
                                 <span className="me-2">✏️</span> Update Contact
@@ -97,7 +95,6 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
                             <button type="button" className="btn-close btn-close-white shadow-none" onClick={onCancel} aria-label="Close"></button>
                         </div>
 
-                        {/* Modal Body (Form) */}
                         <div className="modal-body p-4 bg-light">
                             <form onSubmit={handleUpdate}>
                                 <div className="row g-3">
@@ -111,9 +108,9 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
                                             style={{ borderRadius: '8px' }}
                                         >
                                             <option value="">Select...</option>
-                                            <option value="Mr">Mr.</option>
-                                            <option value="Ms">Ms.</option>
-                                            <option value="Dr">Dr.</option>
+                                            <option value="Mr.">Mr.</option>
+                                            <option value="Ms.">Ms.</option>
+                                            <option value="Dr.">Dr.</option>
                                         </select>
                                     </div>
                                     
@@ -138,7 +135,6 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
                                     </div>
                                 </div>
 
-                                {/* Modal Footer / Actions */}
                                 <div className="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
                                     <button type="button" className="btn btn-outline-secondary px-4 fw-bold" onClick={onCancel} disabled={isLoading} style={{ borderRadius: '8px' }}>
                                         Cancel

@@ -24,6 +24,9 @@ const Login = () => {
            if (response.data && response.data.token) {
                 localStorage.setItem("jwtToken", response.data.token);
                 localStorage.setItem("userId", response.data.id); 
+                
+                // Yeh nayi line add ki gayi hai taake Profile page par email dikhe
+                localStorage.setItem("email", email); 
 
                 setTimeout(() => {
                     window.location.href = "/";

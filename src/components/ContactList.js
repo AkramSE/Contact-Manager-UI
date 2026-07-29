@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import EditContact from './EditContact';
+import ViewContact from './ViewContact'; // ViewContact import kiya gaya hai
 import Swal from 'sweetalert2';
 
 const ContactList = () => {
     const [contacts, setContacts] = useState([]);
     const [editingContact, setEditingContact] = useState(null);
+    const [viewingContact, setViewingContact] = useState(null); // Nayi state View ke liye
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [pageSize, setPageSize] = useState(5);
+    
+    // Hidden file input ka reference Import ke liye
+    const fileInputRef = useRef(null);
 
-    // Triggers a data refresh when page, size, or search state changes. 
     useEffect(() => {
         loadContacts(currentPage, pageSize, searchTerm);
     }, [currentPage, pageSize, searchTerm]);
@@ -55,20 +59,118 @@ const ContactList = () => {
                 const token = localStorage.getItem("jwtToken");
                 const userId = localStorage.getItem("userId");
                 await axios.delete(`http://localhost:8080/users/${userId}/contacts/${contactId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
-                // Refreshes the current page data after a successful deletion. 
                 loadContacts(currentPage, pageSize, searchTerm);
-
                 Swal.fire('Deleted!', 'Your contact has been deleted.', 'success');
             } catch (error) {
                 console.error("Error occurred during deletion:", error);
                 Swal.fire('Error!', 'Something went wrong.', 'error');
             }
         }
+    };
+
+    // ==========================================
+    // EXPORT TO CSV LOGIC
+    // ==========================================
+    const handleExport = async () => {
+        try {
+            const token = localStorage.getItem("jwtToken");
+            const userId = localStorage.getItem("userId");
+            
+            const response = await axios.get(`http://localhost:8080/users/${userId}/contacts?page=0&size=1000`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            
+            const allContacts = response.data.content;
+            
+            if (!allContacts || allContacts.length === 0) {
+                Swal.fire('Info', 'No contacts available to export.', 'info');
+                return;
+            }
+
+            let csvContent = "Title,First Name,Last Name,Email,Phone\n";
+            
+            allContacts.forEach(contact => {
+                const email = contact.emails && contact.emails.length > 0 ? contact.emails[0].emailAddress : "";
+                const phone = contact.phones && contact.phones.length > 0 ? contact.phones[0].phoneNumber : "";
+                csvContent += `"${contact.title || ""}","${contact.firstName || ""}","${contact.lastName || ""}","${email}","${phone}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "My_Contacts.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            Swal.fire('Exported!', 'Contacts exported to CSV successfully.', 'success');
+        } catch (error) {
+            console.error("Export error", error);
+            Swal.fire('Error!', 'Failed to export contacts.', 'error');
+        }
+    };
+
+    // ==========================================
+    // IMPORT FROM CSV LOGIC
+    // ==========================================
+    const handleImport = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const text = e.target.result;
+            const rows = text.split('\n');
+            let successCount = 0;
+            
+            const token = localStorage.getItem("jwtToken");
+            const userId = localStorage.getItem("userId");
+
+            Swal.fire({
+                title: 'Importing Contacts...',
+                text: 'Please wait while we save your contacts.',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i].trim();
+                if (!row) continue;
+                
+                const cols = row.replace(/"/g, '').split(',');
+                
+                if (cols.length >= 5) {
+                    const newContact = {
+                        title: cols[0],
+                        firstName: cols[1],
+                        lastName: cols[2],
+                        emails: [{ emailAddress: cols[3], label: "Personal" }],
+                        phones: [{ phoneNumber: cols[4], label: "Mobile" }]
+                    };
+                    
+                    try {
+                        await axios.post(`http://localhost:8080/users/${userId}/contacts`, newContact, {
+                            headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+                        });
+                        successCount++;
+                    } catch (err) {
+                        console.error("Failed to import row", i, err);
+                    }
+                }
+            }
+            
+            Swal.close();
+            Swal.fire('Import Complete', `Successfully imported ${successCount} contacts!`, 'success');
+            loadContacts(0, pageSize, ""); 
+        };
+        reader.readAsText(file);
+        
+        event.target.value = null; 
     };
 
     const startEdit = (contact) => {
@@ -88,11 +190,30 @@ const ContactList = () => {
         <div className="container mt-5">
 
             <div className="d-flex flex-wrap justify-content-between align-items-center mb-4 p-4 bg-white shadow-sm rounded-4 border">
-                <h3 className="text-primary fw-bold mb-3 mb-md-0" style={{ letterSpacing: '0.5px' }}>
-                    All Contacts
-                </h3>
+                <div className="d-flex align-items-center mb-3 mb-md-0 gap-3">
+                    <h3 className="text-primary fw-bold m-0" style={{ letterSpacing: '0.5px' }}>
+                        All Contacts
+                    </h3>
+                    
+                    <div className="d-flex gap-2 ms-3">
+                        <button onClick={handleExport} className="btn btn-sm btn-outline-success fw-bold rounded-pill px-3 shadow-sm">
+                            📤 Export
+                        </button>
+                        
+                        <input 
+                            type="file" 
+                            accept=".csv" 
+                            ref={fileInputRef} 
+                            style={{ display: 'none' }} 
+                            onChange={handleImport} 
+                        />
+                        <button onClick={() => fileInputRef.current.click()} className="btn btn-sm btn-outline-primary fw-bold rounded-pill px-3 shadow-sm">
+                            📥 Import
+                        </button>
+                    </div>
+                </div>
 
-                <div className="input-group" style={{ maxWidth: '400px', width: '100%' }}>
+                <div className="input-group" style={{ maxWidth: '350px', width: '100%' }}>
                     <span className="input-group-text bg-light border-end-0 text-muted px-3" style={{ borderTopLeftRadius: '50rem', borderBottomLeftRadius: '50rem' }}>
                         🔍
                     </span>
@@ -133,6 +254,14 @@ const ContactList = () => {
                                         <td className="text-muted">{contact.emails && contact.emails.length > 0 ? contact.emails[0].emailAddress : 'N/A'}</td>
                                         <td className="text-muted">{contact.phones && contact.phones.length > 0 ? contact.phones[0].phoneNumber : 'N/A'}</td>
                                         <td className="text-center">
+                                            {/* Naya View Button Yahan Add Kiya Gaya Hai */}
+                                            <button
+                                                className="btn btn-sm me-2 text-white shadow-sm rounded-pill px-3"
+                                                style={{ backgroundColor: '#6366f1' }}
+                                                onClick={() => setViewingContact(contact)}>
+                                                View
+                                            </button>
+
                                             <button
                                                 className="btn btn-sm btn-info me-2 text-white shadow-sm rounded-pill px-3"
                                                 onClick={() => startEdit(contact)}>
@@ -201,12 +330,19 @@ const ContactList = () => {
                 </div>
             </div>
 
-            {/* Rendered last to ensure the modal appears on top. */} 
             {editingContact && (
                 <EditContact
                     contactToEdit={editingContact}
                     onUpdateSuccess={handleUpdateSuccess}
                     onCancel={handleCancel}
+                />
+            )}
+
+            {/* View Contact Modal Yahan Render Hoga */}
+            {viewingContact && (
+                <ViewContact
+                    contact={viewingContact}
+                    onClose={() => setViewingContact(null)}
                 />
             )}
         </div>
