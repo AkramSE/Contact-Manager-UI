@@ -50,8 +50,11 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
         };
 
         try {
-            const token = localStorage.getItem("jwtToken");
-            const userId = localStorage.getItem("userId");
+            // FIX: Decoding the token and userId using atob() before sending the API request
+            const rawToken = localStorage.getItem("jwtToken");
+            const rawUserId = localStorage.getItem("userId");
+            const token = rawToken ? atob(rawToken) : "";
+            const userId = rawUserId ? atob(rawUserId) : "";
 
             await axios.put(`http://localhost:8080/users/${userId}/contacts/${contactToEdit.id}`, updatedContact, {
                 headers: {
@@ -83,7 +86,6 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
         <>
             <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1040 }}></div>
             
-            {/* FIX: Removed role="dialog" */}
             <div 
                 className="modal fade show d-block" 
                 tabIndex="-1" 
@@ -91,13 +93,11 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
                 aria-modal="true"
                 style={{ zIndex: 1050 }}
             >
-                {/* FIX: Removed role="document" */}
                 <div className="modal-dialog modal-dialog-centered modal-lg">
                     <div className="modal-content shadow-lg border-0 rounded-4">
                         
                         <div className="modal-header text-white rounded-top-4 py-3" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', borderBottom: 'none' }}>
                             <h4 id="editContactModalTitle" className="modal-title fw-bold m-0 d-flex align-items-center">
-                                {/* FIX: Added accessibility for emoji */}
                                 <span className="me-2" role="img" aria-label="pencil">✏️</span> Update Contact
                             </h4>
                             <button type="button" className="btn-close btn-close-white shadow-none" onClick={onCancel} aria-label="Close"></button>

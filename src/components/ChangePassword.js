@@ -22,10 +22,13 @@ const ChangePassword = ({ showModal, onClose }) => {
 
         setIsLoading(true);
 
-        const token = localStorage.getItem("jwtToken");
-        const userId = localStorage.getItem("userId");
-
         try {
+            // FIX: Decoding the token and userId using atob() before API call
+            const rawToken = localStorage.getItem("jwtToken");
+            const rawUserId = localStorage.getItem("userId");
+            const token = rawToken ? atob(rawToken) : "";
+            const userId = rawUserId ? atob(rawUserId) : "";
+
             await axios.put(`http://localhost:8080/users/${userId}/change-password`, 
             {
                 oldPassword: oldPassword,
@@ -33,7 +36,8 @@ const ChangePassword = ({ showModal, onClose }) => {
             }, 
             {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -63,15 +67,12 @@ const ChangePassword = ({ showModal, onClose }) => {
         <>
             <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1040 }}></div>
             
-            {/* FIX: Removed role="dialog" to bypass strict <dialog> tag warning, kept aria-modal="true" */}
             <div className="modal fade show d-block" tabIndex="-1" aria-modal="true" aria-labelledby="changePasswordModalTitle" style={{ zIndex: 1050 }}>
-                {/* FIX: Removed role="document" */}
                 <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content shadow-lg border-0 rounded-4">
                         
                         <div className="modal-header text-white rounded-top-4 py-3" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', borderBottom: 'none' }}>
                             <h4 id="changePasswordModalTitle" className="modal-title fw-bold m-0 d-flex align-items-center">
-                                {/* FIX: Added accessibility for emoji */}
                                 <span className="me-2" role="img" aria-label="key">🔑</span> Change Password
                             </h4>
                             <button type="button" className="btn-close btn-close-white shadow-none" onClick={onClose} aria-label="Close"></button>
@@ -80,7 +81,6 @@ const ChangePassword = ({ showModal, onClose }) => {
                         <div className="modal-body p-4 bg-light">
                             {errorMsg && (
                                 <div className="alert alert-danger fw-medium py-2" style={{ borderRadius: '8px', fontSize: '0.9rem' }}>
-                                    {/* FIX: Added accessibility for emoji */}
                                     <span role="img" aria-label="warning">⚠️</span> {errorMsg}
                                 </div>
                             )}

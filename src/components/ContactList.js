@@ -19,13 +19,19 @@ const ContactList = () => {
         loadContacts(currentPage, pageSize, searchTerm);
     }, [currentPage, pageSize, searchTerm]);
 
+    // Helper function to get and decode auth data safely
+    const getAuthData = () => {
+        const rawToken = localStorage.getItem("jwtToken");
+        const rawUserId = localStorage.getItem("userId");
+        const token = rawToken ? atob(rawToken) : "";
+        const userId = rawUserId ? atob(rawUserId) : "";
+        return { token, userId };
+    };
+
     const loadContacts = async (page = 0, size = 5, keyword = "") => {
         try {
-            const currentToken = localStorage.getItem("jwtToken");
-            const storedUserId = localStorage.getItem("userId");
-            
-            // FIX: Using Number.parseInt and Number.isNaN
-            const currentUserId = Number.parseInt(storedUserId, 10);
+            const { token, userId } = getAuthData();
+            const currentUserId = Number.parseInt(userId, 10);
             
             if (Number.isNaN(currentUserId)) {
                 console.error("Invalid User ID");
@@ -34,7 +40,7 @@ const ContactList = () => {
 
             const result = await axios.get(`http://localhost:8080/users/${currentUserId}/contacts`, {
                 headers: {
-                    'Authorization': `Bearer ${currentToken}`
+                    'Authorization': `Bearer ${token}`
                 },
                 params: {
                     page: page,
@@ -63,19 +69,15 @@ const ContactList = () => {
 
         if (result.isConfirmed) {
             try {
-                const token = localStorage.getItem("jwtToken");
-                const storedUserId = localStorage.getItem("userId");
-                
-                // FIX: Using Number.parseInt and Number.isNaN
-                const userId = Number.parseInt(storedUserId, 10);
+                const { token, userId } = getAuthData();
+                const parsedUserId = Number.parseInt(userId, 10);
                 const safeContactId = Number.parseInt(contactId, 10);
 
-                if (Number.isNaN(userId) || Number.isNaN(safeContactId)) {
-                    // FIX: Using TypeError instead of generic Error
+                if (Number.isNaN(parsedUserId) || Number.isNaN(safeContactId)) {
                     throw new TypeError("Invalid ID for deletion");
                 }
 
-                await axios.delete(`http://localhost:8080/users/${userId}/contacts/${safeContactId}`, {
+                await axios.delete(`http://localhost:8080/users/${parsedUserId}/contacts/${safeContactId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
@@ -90,18 +92,14 @@ const ContactList = () => {
 
     const handleExport = async () => {
         try {
-            const token = localStorage.getItem("jwtToken");
-            const storedUserId = localStorage.getItem("userId");
-            
-            // FIX: Using Number.parseInt and Number.isNaN
-            const userId = Number.parseInt(storedUserId, 10);
+            const { token, userId } = getAuthData();
+            const parsedUserId = Number.parseInt(userId, 10);
 
-            if (Number.isNaN(userId)) {
-                // FIX: Using TypeError
+            if (Number.isNaN(parsedUserId)) {
                 throw new TypeError("Invalid User ID for export");
             }
             
-            const response = await axios.get(`http://localhost:8080/users/${userId}/contacts`, {
+            const response = await axios.get(`http://localhost:8080/users/${parsedUserId}/contacts`, {
                 headers: { 'Authorization': `Bearer ${token}` },
                 params: {
                     page: 0,
@@ -157,14 +155,10 @@ const ContactList = () => {
             const rows = text.split('\n');
             let successCount = 0;
             
-            const token = localStorage.getItem("jwtToken");
-            const storedUserId = localStorage.getItem("userId");
-            
-            // FIX: Using Number.parseInt and Number.isNaN
-            const userId = Number.parseInt(storedUserId, 10);
+            const { token, userId } = getAuthData();
+            const parsedUserId = Number.parseInt(userId, 10);
 
-            if (Number.isNaN(userId)) {
-                // FIX: Using TypeError
+            if (Number.isNaN(parsedUserId)) {
                 throw new TypeError("Invalid User ID for import");
             }
 
@@ -184,7 +178,7 @@ const ContactList = () => {
                     };
                     
                     try {
-                        await axios.post(`http://localhost:8080/users/${userId}/contacts`, newContact, {
+                        await axios.post(`http://localhost:8080/users/${parsedUserId}/contacts`, newContact, {
                             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
                         });
                         successCount++;

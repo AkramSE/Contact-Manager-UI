@@ -30,8 +30,11 @@ const AddContact = () => {
         setIsLoading(true);
 
         try {
-            const token = localStorage.getItem("jwtToken");
-            const userId = localStorage.getItem("userId"); 
+            // FIX: Decoding the token and userId using atob()
+            const rawToken = localStorage.getItem("jwtToken");
+            const rawUserId = localStorage.getItem("userId");
+            const token = rawToken ? atob(rawToken) : "";
+            const userId = rawUserId ? atob(rawUserId) : ""; 
             
             const formattedData = {
                 title: formData.title,
@@ -88,15 +91,12 @@ const AddContact = () => {
                 <>
                     <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}></div>
                     
-                    {/* FIX: Removed role="dialog" and added aria-modal="true" and aria-labelledby */}
                     <div className="modal fade show d-block" tabIndex="-1" aria-modal="true" aria-labelledby="addContactModalTitle">
-                        {/* FIX: Removed role="document" */}
                         <div className="modal-dialog modal-dialog-centered modal-lg">
                             <div className="modal-content shadow-lg border-0 rounded-4">
                                 
                                 <div className="modal-header border-bottom-0 pb-0 pt-4 px-4">
                                     <h4 id="addContactModalTitle" className="modal-title fw-bold text-primary">
-                                        {/* FIX: Added role="img" and aria-label for emoji */}
                                         <span className="me-2" role="img" aria-label="user">👤</span> Add New Contact
                                     </h4>
                                     <button type="button" className="btn-close shadow-none" onClick={handleClose} aria-label="Close"></button>
