@@ -4,8 +4,6 @@ import ChangePassword from './ChangePassword';
 
 const UserProfile = () => {
     const [showPasswordModal, setShowPasswordModal] = useState(false);
-    
-    // LocalStorage se user ki email nikal rahe hain
     const userEmail = localStorage.getItem("email") || "User Email Not Found";
 
     const handleLogout = () => {
@@ -17,13 +15,10 @@ const UserProfile = () => {
 
     return (
         <div style={{ backgroundColor: '#f4f7f6', minHeight: '100vh', paddingBottom: '50px' }}>
-            
-            {/* Navbar specifically for Profile Page */}
             <nav className="navbar navbar-expand-lg shadow-sm mb-4" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', padding: '15px 0' }}>
               <div className="container">
                 <span className="navbar-brand fw-bold text-white d-flex align-items-center" style={{ letterSpacing: '1px' }}>
-                  <span className="me-2" style={{ fontSize: '1.5rem' }} role="img" aria-label="shield">🛡️</span>
-                  Secure Contact Manager
+                  <span className="me-2" style={{ fontSize: '1.5rem' }} role="img" aria-label="shield">🛡️</span>{' '}Secure Contact Manager
                 </span>
                 <div className="d-flex align-items-center">
                   <Link to="/contacts" className="btn btn-sm btn-outline-light me-3 fw-bold rounded-pill px-3 text-decoration-none">
@@ -39,7 +34,6 @@ const UserProfile = () => {
                         <div className="card shadow-lg border-0 rounded-4">
                             <div className="card-body p-5 text-center">
                                 
-                                {/* Updated Profile Icon: Shows the first letter of the email instead of an emoji */}
                                 <div className="d-inline-flex align-items-center justify-content-center mb-4" 
                                      style={{ 
                                          width: '80px', height: '80px', 
@@ -71,6 +65,7 @@ const UserProfile = () => {
                                     className="btn w-100 fw-bold shadow-sm"
                                     style={{ borderRadius: '10px', background: '#dc3545', color: 'white', height: '50px', border: 'none' }}
                                 >
+                                    {/* FIX: Explicit spacing added to prevent ambiguous spacing error */}
                                     Logout{' '}<span role="img" aria-label="lock">🔒</span>
                                 </button>
 
@@ -80,7 +75,6 @@ const UserProfile = () => {
                 </div>
             </div>
 
-            {/* Modal Render */}
             <ChangePassword
                 showModal={showPasswordModal}
                 onClose={() => setShowPasswordModal(false)}

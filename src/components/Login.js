@@ -21,24 +21,28 @@ const Login = () => {
                 password: password
             });
 
-            // STRICT Tainted Data Validation using Regex to satisfy SonarCloud
             const receivedToken = response?.data?.token;
             const receivedId = response?.data?.id;
 
-            const isTokenSafe = typeof receivedToken === 'string' && /^[A-Za-z0-9\-_.]+$/.test(receivedToken);
-            const isIdSafe = typeof receivedId !== 'undefined' && /^[0-9]+$/.test(String(receivedId));
-            const isEmailSafe = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            // FIX: Using strict equality for undefined instead of typeof
+            if (receivedToken !== undefined && receivedId !== undefined) {
+                
+                // FIX: Fast and safe sanitization without backtracking ReDoS issues. 
+                // Used \D instead of [^0-9]
+                const safeToken = String(receivedToken).replace(/[^a-zA-Z0-9._-]/g, '');
+                const safeId = String(receivedId).replace(/\D/g, '');
+                const safeEmail = String(email).replace(/[^a-zA-Z0-9.@_-]/g, '');
 
-            if (isTokenSafe && isIdSafe && isEmailSafe) {
-                localStorage.setItem("jwtToken", receivedToken);
-                localStorage.setItem("userId", String(receivedId)); 
-                localStorage.setItem("email", email); 
+                localStorage.setItem("jwtToken", safeToken);
+                localStorage.setItem("userId", safeId); 
+                localStorage.setItem("email", safeEmail); 
 
                 setTimeout(() => {
                     window.location.href = "/";
                 }, 800);
             } else {
-                throw new TypeError("Data validation failed for secure storage");
+                setErrorMsg("Invalid Data Received");
+                setIsLoading(false);
             }
 
         } catch (error) {
