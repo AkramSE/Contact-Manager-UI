@@ -21,11 +21,15 @@ const Login = () => {
                 password: password
             });
 
-            // FIX: Validating data before writing to browser storage to avoid SonarCloud security warning
+            // FIX: Sanitizing tainted data before writing to browser storage
            if (response?.data?.token && typeof response.data.token === 'string') {
-                localStorage.setItem("jwtToken", response.data.token.trim());
-                localStorage.setItem("userId", String(response.data.id)); 
-                localStorage.setItem("email", email.trim()); 
+                const cleanToken = String(response.data.token).replace(/[^a-zA-Z0-9\-_.]/g, '');
+                const cleanId = String(response.data.id).replace(/[^0-9]/g, '');
+                const cleanEmail = String(email).replace(/[^a-zA-Z0-9@.\-_]/g, '');
+
+                localStorage.setItem("jwtToken", cleanToken);
+                localStorage.setItem("userId", cleanId); 
+                localStorage.setItem("email", cleanEmail); 
 
                 setTimeout(() => {
                     window.location.href = "/";
@@ -167,7 +171,6 @@ const Login = () => {
                             onMouseOut={handleHoverFocusOut}
                             onBlur={handleHoverFocusOut} 
                         >
-                            {/* FIX: Replaced span with output tag to satisfy SonarCloud accessibility rule */}
                             {isLoading ? (
                                 <output className="spinner-border spinner-border-sm me-2" aria-hidden="true"></output>
                             ) : null}

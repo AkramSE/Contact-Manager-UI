@@ -22,7 +22,14 @@ const ContactList = () => {
     const loadContacts = async (page = 0, size = 5, keyword = "") => {
         try {
             const currentToken = localStorage.getItem("jwtToken");
-            const currentUserId = localStorage.getItem("userId");
+            // Tainted Data Fix: Validate ID to ensure it's a number before passing to URL
+            const storedUserId = localStorage.getItem("userId");
+            const currentUserId = parseInt(storedUserId, 10);
+            
+            if (isNaN(currentUserId)) {
+                console.error("Invalid User ID");
+                return;
+            }
 
             const result = await axios.get(`http://localhost:8080/users/${currentUserId}/contacts`, {
                 headers: {
@@ -56,8 +63,17 @@ const ContactList = () => {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem("jwtToken");
-                const userId = localStorage.getItem("userId");
-                await axios.delete(`http://localhost:8080/users/${userId}/contacts/${contactId}`, {
+                
+                // Tainted Data Fix: Validate both IDs to ensure they are numbers
+                const storedUserId = localStorage.getItem("userId");
+                const userId = parseInt(storedUserId, 10);
+                const safeContactId = parseInt(contactId, 10);
+
+                if (isNaN(userId) || isNaN(safeContactId)) {
+                    throw new Error("Invalid ID for deletion");
+                }
+
+                await axios.delete(`http://localhost:8080/users/${userId}/contacts/${safeContactId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
@@ -73,7 +89,12 @@ const ContactList = () => {
     const handleExport = async () => {
         try {
             const token = localStorage.getItem("jwtToken");
-            const userId = localStorage.getItem("userId");
+            const storedUserId = localStorage.getItem("userId");
+            const userId = parseInt(storedUserId, 10);
+
+            if (isNaN(userId)) {
+                throw new Error("Invalid User ID for export");
+            }
             
             const response = await axios.get(`http://localhost:8080/users/${userId}/contacts`, {
                 headers: { 'Authorization': `Bearer ${token}` },
@@ -106,7 +127,6 @@ const ContactList = () => {
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
-            // FIX: Replaced document.body.removeChild(link) with link.remove() to satisfy SonarCloud DOM API rule
             link.remove();
             
             Swal.fire('Exported!', 'Contacts exported to CSV successfully.', 'success');
@@ -116,19 +136,11 @@ const ContactList = () => {
         }
     };
 
-    const handleImport = (event) => {
+    const handleImport = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            const text = e.target.result;
-            const rows = text.split('\n');
-            let successCount = 0;
-            
-            const token = localStorage.getItem("jwtToken");
-            const userId = localStorage.getItem("userId");
-
+        try {
             Swal.fire({
                 title: 'Importing Contacts...',
                 text: 'Please wait while we save your contacts.',
@@ -136,11 +148,25 @@ const ContactList = () => {
                 didOpen: () => { Swal.showLoading(); }
             });
 
+            // Modern FileReader Fix: Use Blob.text() instead of FileReader.readAsText()
+            const text = await file.text();
+            const rows = text.split('\n');
+            let successCount = 0;
+            
+            const token = localStorage.getItem("jwtToken");
+            const storedUserId = localStorage.getItem("userId");
+            const userId = parseInt(storedUserId, 10);
+
+            if (isNaN(userId)) {
+                throw new Error("Invalid User ID for import");
+            }
+
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i].trim();
                 if (!row) continue;
                 
-                const cols = row.replace(/"/g, '').split(',');
+                // ReplaceAll Fix: Use replaceAll instead of regex replace
+                const cols = row.replaceAll('"', '').split(',');
                 
                 if (cols.length >= 5) {
                     const newContact = {
@@ -165,8 +191,12 @@ const ContactList = () => {
             Swal.close();
             Swal.fire('Import Complete', `Successfully imported ${successCount} contacts!`, 'success');
             loadContacts(0, pageSize, ""); 
-        };
-        reader.readAsText(file);
+
+        } catch (error) {
+            console.error("Failed to read file", error);
+            Swal.close();
+            Swal.fire('Error', 'Failed to read the imported file.', 'error');
+        }
         
         event.target.value = null; 
     };

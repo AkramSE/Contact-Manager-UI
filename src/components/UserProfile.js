@@ -62,7 +62,7 @@ const UserProfile = () => {
                                     className="btn w-100 fw-bold mb-3 shadow-sm"
                                     style={{ borderRadius: '10px', border: '2px solid #2a5298', color: '#2a5298', height: '50px' }}
                                 >
-                                    <span role="img" aria-label="key">🔑</span> Change Password
+                                    <span role="img" aria-label="key">🔑</span>{' '}Change Password
                                 </button>
 
                                 <button 
@@ -71,7 +71,7 @@ const UserProfile = () => {
                                     className="btn w-100 fw-bold shadow-sm"
                                     style={{ borderRadius: '10px', background: '#dc3545', color: 'white', height: '50px', border: 'none' }}
                                 >
-                                    Logout <span role="img" aria-label="lock">🔒</span>
+                                    Logout{' '}<span role="img" aria-label="lock">🔒</span>
                                 </button>
 
                             </div>

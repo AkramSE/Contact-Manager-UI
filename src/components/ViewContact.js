@@ -8,7 +8,6 @@ const ViewContact = ({ contact, onClose }) => {
             className="modal show d-block" 
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(5px)' }}
             tabIndex="-1"
-            role="dialog"
             aria-modal="true"
             aria-labelledby="viewContactModalTitle"
         >
