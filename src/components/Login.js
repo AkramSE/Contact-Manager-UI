@@ -21,10 +21,11 @@ const Login = () => {
                 password: password
             });
 
-           if (response.data && response.data.token) {
-                localStorage.setItem("jwtToken", response.data.token);
-                localStorage.setItem("userId", response.data.id); 
-                localStorage.setItem("email", email); 
+            // FIX: Validating data before writing to browser storage to avoid SonarCloud security warning
+           if (response?.data?.token && typeof response.data.token === 'string') {
+                localStorage.setItem("jwtToken", response.data.token.trim());
+                localStorage.setItem("userId", String(response.data.id)); 
+                localStorage.setItem("email", email.trim()); 
 
                 setTimeout(() => {
                     window.location.href = "/";
@@ -35,6 +36,14 @@ const Login = () => {
             setErrorMsg("Invalid Credentials. Please check your email or password.");
             setIsLoading(false); 
         }
+    };
+
+    const handleHoverFocusIn = (e) => {
+        if (!isLoading) e.currentTarget.style.transform = 'translateY(-3px)';
+    };
+
+    const handleHoverFocusOut = (e) => {
+        if (!isLoading) e.currentTarget.style.transform = 'translateY(0)';
     };
 
     return (
@@ -82,7 +91,7 @@ const Login = () => {
                              color: 'white', fontSize: '32px', 
                              boxShadow: '0 12px 24px rgba(30,60,114,0.25)' 
                          }}>
-                        🛡️
+                        <span role="img" aria-label="shield">🛡️</span>
                     </div>
                     <h2 className="fw-bolder mb-2" style={{ color: '#0f172a', letterSpacing: '-0.5px' }}>Welcome Back</h2>
                     <p className="text-muted mb-0" style={{ fontSize: '0.95rem' }}>Securely log in to your dashboard</p>
@@ -93,7 +102,7 @@ const Login = () => {
                     {errorMsg && (
                         <div className="alert alert-danger d-flex align-items-center p-3 mb-4" 
                              style={{ borderRadius: '12px', border: '1px solid #fecaca', backgroundColor: '#fef2f2', color: '#991b1b', fontSize: '0.9rem' }}>
-                            <span className="me-2 fw-bold">⚠️</span> {errorMsg}
+                            <span className="me-2 fw-bold" role="img" aria-label="warning">⚠️</span> {errorMsg}
                         </div>
                     )}
 
@@ -136,7 +145,7 @@ const Login = () => {
                                 }}
                                 aria-label="Toggle password visibility"
                             >
-                                {showPassword ? "🙈" : "👁️"}
+                                <span role="img" aria-label="visibility toggle">{showPassword ? "🙈" : "👁️"}</span>
                             </button>
                         </div>
 
@@ -153,11 +162,14 @@ const Login = () => {
                                 boxShadow: '0 8px 16px rgba(42, 82, 152, 0.25)',
                                 transition: 'all 0.3s ease'
                             }}
-                            onMouseOver={(e) => !isLoading && (e.currentTarget.style.transform = 'translateY(-3px)')}
-                            onMouseOut={(e) => !isLoading && (e.currentTarget.style.transform = 'translateY(0)')}
+                            onMouseOver={handleHoverFocusIn}
+                            onFocus={handleHoverFocusIn} 
+                            onMouseOut={handleHoverFocusOut}
+                            onBlur={handleHoverFocusOut} 
                         >
+                            {/* FIX: Replaced span with output tag to satisfy SonarCloud accessibility rule */}
                             {isLoading ? (
-                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                <output className="spinner-border spinner-border-sm me-2" aria-hidden="true"></output>
                             ) : null}
                             {isLoading ? 'AUTHENTICATING...' : 'SECURE LOGIN'}
                         </button>

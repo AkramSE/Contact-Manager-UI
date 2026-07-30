@@ -24,7 +24,6 @@ const ContactList = () => {
             const currentToken = localStorage.getItem("jwtToken");
             const currentUserId = localStorage.getItem("userId");
 
-            // Fix: Using params object instead of string concatenation to avoid SonarCloud security warning for tainted URL
             const result = await axios.get(`http://localhost:8080/users/${currentUserId}/contacts`, {
                 headers: {
                     'Authorization': `Bearer ${currentToken}`
@@ -76,7 +75,6 @@ const ContactList = () => {
             const token = localStorage.getItem("jwtToken");
             const userId = localStorage.getItem("userId");
             
-            // Fix: Using params object here as well
             const response = await axios.get(`http://localhost:8080/users/${userId}/contacts`, {
                 headers: { 'Authorization': `Bearer ${token}` },
                 params: {
@@ -108,7 +106,8 @@ const ContactList = () => {
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
+            // FIX: Replaced document.body.removeChild(link) with link.remove() to satisfy SonarCloud DOM API rule
+            link.remove();
             
             Swal.fire('Exported!', 'Contacts exported to CSV successfully.', 'success');
         } catch (error) {

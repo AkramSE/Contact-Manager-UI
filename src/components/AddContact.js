@@ -88,13 +88,16 @@ const AddContact = () => {
                 <>
                     <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)' }}></div>
                     
-                    <div className="modal fade show d-block" tabIndex="-1" role="dialog">
-                        <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    {/* FIX: Removed role="dialog" and added aria-modal="true" and aria-labelledby */}
+                    <div className="modal fade show d-block" tabIndex="-1" aria-modal="true" aria-labelledby="addContactModalTitle">
+                        {/* FIX: Removed role="document" */}
+                        <div className="modal-dialog modal-dialog-centered modal-lg">
                             <div className="modal-content shadow-lg border-0 rounded-4">
                                 
                                 <div className="modal-header border-bottom-0 pb-0 pt-4 px-4">
-                                    <h4 className="modal-title fw-bold text-primary">
-                                        <span className="me-2">👤</span> Add New Contact
+                                    <h4 id="addContactModalTitle" className="modal-title fw-bold text-primary">
+                                        {/* FIX: Added role="img" and aria-label for emoji */}
+                                        <span className="me-2" role="img" aria-label="user">👤</span> Add New Contact
                                     </h4>
                                     <button type="button" className="btn-close shadow-none" onClick={handleClose} aria-label="Close"></button>
                                 </div>

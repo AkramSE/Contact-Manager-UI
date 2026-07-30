@@ -39,7 +39,7 @@ const Navbar = () => {
                     </span>
                     
                     <button 
-                        type="button" // Fix: Added explicit type="button"
+                        type="button"
                         onClick={handleLogout}
                         className="btn btn-sm fw-bold text-white shadow"
                         style={{ 
@@ -50,9 +50,9 @@ const Navbar = () => {
                             transition: 'all 0.3s ease'
                         }}
                         onMouseOver={handleHoverFocusIn}
-                        onFocus={handleHoverFocusIn}   // Fix: Added onFocus to match onMouseOver for accessibility
+                        onFocus={handleHoverFocusIn}
                         onMouseOut={handleHoverFocusOut}
-                        onBlur={handleHoverFocusOut}   // Fix: Added onBlur to match onMouseOut for accessibility
+                        onBlur={handleHoverFocusOut}
                     >
                         Logout <span role="img" aria-label="lock">🔒</span>
                     </button>
