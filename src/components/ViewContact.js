@@ -3,11 +3,15 @@ import React from 'react';
 const ViewContact = ({ contact, onClose }) => {
     if (!contact) return null;
 
-    // Naam ka pehla harf nikalne ke liye avatar ke liye
-    const firstLetter = contact.firstName ? contact.firstName.charAt(0).toUpperCase() : '👤';
-
     return (
-        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(5px)' }}>
+        <div 
+            className="modal show d-block" 
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', backdropFilter: 'blur(5px)' }}
+            tabIndex="-1"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="viewContactModalTitle"
+        >
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '20px', overflow: 'hidden' }}>
                     
@@ -24,9 +28,9 @@ const ViewContact = ({ contact, onClose }) => {
                                      color: '#1e3c72', fontSize: '36px', fontWeight: 'bold',
                                      boxShadow: '0 8px 16px rgba(0,0,0,0.2)' 
                                  }}>
-                                {firstLetter}
+                                {contact.firstName ? contact.firstName.charAt(0).toUpperCase() : <span role="img" aria-label="user profile">👤</span>}
                             </div>
-                            <h4 className="modal-title fw-bold m-0">{contact.title} {contact.firstName} {contact.lastName}</h4>
+                            <h4 id="viewContactModalTitle" className="modal-title fw-bold m-0">{contact.title} {contact.firstName} {contact.lastName}</h4>
                         </div>
                     </div>
 
@@ -36,7 +40,9 @@ const ViewContact = ({ contact, onClose }) => {
                             <div className="card-body p-4">
                                 
                                 <div className="mb-3">
-                                    <small className="text-muted fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>📧 Email Address</small>
+                                    <small className="text-muted fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>
+                                        <span role="img" aria-label="email">📧</span> Email Address
+                                    </small>
                                     <div className="fs-5 text-dark mt-1">
                                         {contact.emails && contact.emails.length > 0 ? contact.emails[0].emailAddress : 'No Email Provided'}
                                     </div>
@@ -45,7 +51,9 @@ const ViewContact = ({ contact, onClose }) => {
                                 <hr className="text-muted opacity-25" />
 
                                 <div>
-                                    <small className="text-muted fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>📱 Phone Number</small>
+                                    <small className="text-muted fw-bold text-uppercase" style={{ letterSpacing: '1px' }}>
+                                        <span role="img" aria-label="phone">📱</span> Phone Number
+                                    </small>
                                     <div className="fs-5 text-dark mt-1">
                                         {contact.phones && contact.phones.length > 0 ? contact.phones[0].phoneNumber : 'No Phone Provided'}
                                     </div>

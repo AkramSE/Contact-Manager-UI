@@ -1,19 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import EditContact from './EditContact';
-import ViewContact from './ViewContact'; // ViewContact import kiya gaya hai
+import ViewContact from './ViewContact';
 import Swal from 'sweetalert2';
 
 const ContactList = () => {
     const [contacts, setContacts] = useState([]);
     const [editingContact, setEditingContact] = useState(null);
-    const [viewingContact, setViewingContact] = useState(null); // Nayi state View ke liye
+    const [viewingContact, setViewingContact] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [pageSize, setPageSize] = useState(5);
     
-    // Hidden file input ka reference Import ke liye
     const fileInputRef = useRef(null);
 
     useEffect(() => {
@@ -25,14 +24,15 @@ const ContactList = () => {
             const currentToken = localStorage.getItem("jwtToken");
             const currentUserId = localStorage.getItem("userId");
 
-            let url = `http://localhost:8080/users/${currentUserId}/contacts?page=${page}&size=${size}`;
-            if (keyword) {
-                url += `&keyword=${keyword}`;
-            }
-
-            const result = await axios.get(url, {
+            // Fix: Using params object instead of string concatenation to avoid SonarCloud security warning for tainted URL
+            const result = await axios.get(`http://localhost:8080/users/${currentUserId}/contacts`, {
                 headers: {
                     'Authorization': `Bearer ${currentToken}`
+                },
+                params: {
+                    page: page,
+                    size: size,
+                    ...(keyword && { keyword: keyword })
                 }
             });
 
@@ -71,16 +71,18 @@ const ContactList = () => {
         }
     };
 
-    // ==========================================
-    // EXPORT TO CSV LOGIC
-    // ==========================================
     const handleExport = async () => {
         try {
             const token = localStorage.getItem("jwtToken");
             const userId = localStorage.getItem("userId");
             
-            const response = await axios.get(`http://localhost:8080/users/${userId}/contacts?page=0&size=1000`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+            // Fix: Using params object here as well
+            const response = await axios.get(`http://localhost:8080/users/${userId}/contacts`, {
+                headers: { 'Authorization': `Bearer ${token}` },
+                params: {
+                    page: 0,
+                    size: 1000
+                }
             });
             
             const allContacts = response.data.content;
@@ -115,9 +117,6 @@ const ContactList = () => {
         }
     };
 
-    // ==========================================
-    // IMPORT FROM CSV LOGIC
-    // ==========================================
     const handleImport = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -196,7 +195,7 @@ const ContactList = () => {
                     </h3>
                     
                     <div className="d-flex gap-2 ms-3">
-                        <button onClick={handleExport} className="btn btn-sm btn-outline-success fw-bold rounded-pill px-3 shadow-sm">
+                        <button type="button" onClick={handleExport} className="btn btn-sm btn-outline-success fw-bold rounded-pill px-3 shadow-sm">
                             📤 Export
                         </button>
                         
@@ -207,7 +206,7 @@ const ContactList = () => {
                             style={{ display: 'none' }} 
                             onChange={handleImport} 
                         />
-                        <button onClick={() => fileInputRef.current.click()} className="btn btn-sm btn-outline-primary fw-bold rounded-pill px-3 shadow-sm">
+                        <button type="button" onClick={() => fileInputRef.current.click()} className="btn btn-sm btn-outline-primary fw-bold rounded-pill px-3 shadow-sm">
                             📥 Import
                         </button>
                     </div>
@@ -254,8 +253,8 @@ const ContactList = () => {
                                         <td className="text-muted">{contact.emails && contact.emails.length > 0 ? contact.emails[0].emailAddress : 'N/A'}</td>
                                         <td className="text-muted">{contact.phones && contact.phones.length > 0 ? contact.phones[0].phoneNumber : 'N/A'}</td>
                                         <td className="text-center">
-                                            {/* Naya View Button Yahan Add Kiya Gaya Hai */}
                                             <button
+                                                type="button"
                                                 className="btn btn-sm me-2 text-white shadow-sm rounded-pill px-3"
                                                 style={{ backgroundColor: '#6366f1' }}
                                                 onClick={() => setViewingContact(contact)}>
@@ -263,11 +262,13 @@ const ContactList = () => {
                                             </button>
 
                                             <button
+                                                type="button"
                                                 className="btn btn-sm btn-info me-2 text-white shadow-sm rounded-pill px-3"
                                                 onClick={() => startEdit(contact)}>
                                                 Edit
                                             </button>
                                             <button
+                                                type="button"
                                                 className="btn btn-sm btn-danger shadow-sm rounded-pill px-3"
                                                 onClick={() => deleteContact(contact.id)}>
                                                 Delete
@@ -289,6 +290,7 @@ const ContactList = () => {
                 <div className="card-footer bg-white border-top-0 p-4">
                     <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
                         <button
+                            type="button"
                             className="btn btn-outline-primary rounded-pill px-4"
                             onClick={() => setCurrentPage(currentPage - 1)}
                             disabled={currentPage === 0}
@@ -302,8 +304,9 @@ const ContactList = () => {
                             </span>
 
                             <div className="d-flex align-items-center bg-light px-3 py-1 rounded-pill border">
-                                <label className="me-2 mb-0 small fw-bold text-secondary">Rows:</label>
+                                <label htmlFor="pageSizeSelect" className="me-2 mb-0 small fw-bold text-secondary">Rows:</label>
                                 <select
+                                    id="pageSizeSelect"
                                     className="form-select form-select-sm border-0 bg-transparent shadow-none p-0 text-primary fw-bold"
                                     value={pageSize}
                                     onChange={(e) => {
@@ -320,6 +323,7 @@ const ContactList = () => {
                         </div>
 
                         <button
+                            type="button"
                             className="btn btn-outline-primary rounded-pill px-4"
                             onClick={() => setCurrentPage(currentPage + 1)}
                             disabled={currentPage >= totalPages - 1 || totalPages === 0}
@@ -338,7 +342,6 @@ const ContactList = () => {
                 />
             )}
 
-            {/* View Contact Modal Yahan Render Hoga */}
             {viewingContact && (
                 <ViewContact
                     contact={viewingContact}

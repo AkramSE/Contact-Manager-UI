@@ -45,7 +45,6 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
             title: formData.title,
             firstName: formData.firstName,
             lastName: formData.lastName,
-            // Changed from emailType/phoneType to 'label'
             emails: [{ emailAddress: formData.email, label: "Personal" }],
             phones: [{ phoneNumber: formData.phone, label: "Mobile" }]
         };
@@ -84,12 +83,19 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
         <>
             <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1040 }}></div>
             
-            <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ zIndex: 1050 }}>
+            <div 
+                className="modal fade show d-block" 
+                tabIndex="-1" 
+                role="dialog" 
+                aria-labelledby="editContactModalTitle"
+                aria-modal="true"
+                style={{ zIndex: 1050 }}
+            >
                 <div className="modal-dialog modal-dialog-centered modal-lg" role="document">
                     <div className="modal-content shadow-lg border-0 rounded-4">
                         
                         <div className="modal-header text-white rounded-top-4 py-3" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', borderBottom: 'none' }}>
-                            <h4 className="modal-title fw-bold m-0 d-flex align-items-center">
+                            <h4 id="editContactModalTitle" className="modal-title fw-bold m-0 d-flex align-items-center">
                                 <span className="me-2">✏️</span> Update Contact
                             </h4>
                             <button type="button" className="btn-close btn-close-white shadow-none" onClick={onCancel} aria-label="Close"></button>
@@ -99,8 +105,9 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
                             <form onSubmit={handleUpdate}>
                                 <div className="row g-3">
                                     <div className="col-md-4 mb-2">
-                                        <label className="form-label fw-semibold text-secondary small">Title</label>
+                                        <label htmlFor="editTitle" className="form-label fw-semibold text-secondary small">Title</label>
                                         <select 
+                                            id="editTitle"
                                             className="form-select border-0 shadow-sm" 
                                             name="title" 
                                             value={formData.title} 
@@ -115,23 +122,23 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
                                     </div>
                                     
                                     <div className="col-md-4 mb-2">
-                                        <label className="form-label fw-semibold text-secondary small">First Name *</label>
-                                        <input type="text" className="form-control border-0 shadow-sm" name="firstName" value={formData.firstName} onChange={handleChange} required style={{ borderRadius: '8px' }} />
+                                        <label htmlFor="editFirstName" className="form-label fw-semibold text-secondary small">First Name *</label>
+                                        <input type="text" id="editFirstName" className="form-control border-0 shadow-sm" name="firstName" value={formData.firstName} onChange={handleChange} required style={{ borderRadius: '8px' }} />
                                     </div>
 
                                     <div className="col-md-4 mb-2">
-                                        <label className="form-label fw-semibold text-secondary small">Last Name *</label>
-                                        <input type="text" className="form-control border-0 shadow-sm" name="lastName" value={formData.lastName} onChange={handleChange} required style={{ borderRadius: '8px' }} />
+                                        <label htmlFor="editLastName" className="form-label fw-semibold text-secondary small">Last Name *</label>
+                                        <input type="text" id="editLastName" className="form-control border-0 shadow-sm" name="lastName" value={formData.lastName} onChange={handleChange} required style={{ borderRadius: '8px' }} />
                                     </div>
 
                                     <div className="col-md-6 mb-2">
-                                        <label className="form-label fw-semibold text-secondary small">Email Address *</label>
-                                        <input type="email" className="form-control border-0 shadow-sm" name="email" value={formData.email} onChange={handleChange} required placeholder="e.g. work@example.com" style={{ borderRadius: '8px' }} />
+                                        <label htmlFor="editEmail" className="form-label fw-semibold text-secondary small">Email Address *</label>
+                                        <input type="email" id="editEmail" className="form-control border-0 shadow-sm" name="email" value={formData.email} onChange={handleChange} required placeholder="e.g. work@example.com" style={{ borderRadius: '8px' }} />
                                     </div>
 
                                     <div className="col-md-6 mb-2">
-                                        <label className="form-label fw-semibold text-secondary small">Phone Number *</label>
-                                        <input type="tel" className="form-control border-0 shadow-sm" name="phone" value={formData.phone} onChange={handleChange} required placeholder="e.g. 03001234567" style={{ borderRadius: '8px' }} />
+                                        <label htmlFor="editPhone" className="form-label fw-semibold text-secondary small">Phone Number *</label>
+                                        <input type="tel" id="editPhone" className="form-control border-0 shadow-sm" name="phone" value={formData.phone} onChange={handleChange} required placeholder="e.g. 03001234567" style={{ borderRadius: '8px' }} />
                                     </div>
                                 </div>
 

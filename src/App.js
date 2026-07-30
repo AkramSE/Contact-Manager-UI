@@ -25,7 +25,7 @@ function App() {
         <nav className="navbar navbar-expand-lg shadow-sm mb-4" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', padding: '15px 0' }}>
           <div className="container">
             <span className="navbar-brand fw-bold text-white d-flex align-items-center" style={{ letterSpacing: '1px' }}>
-              <span className="me-2" style={{ fontSize: '1.5rem' }}>🛡️</span>
+              <span className="me-2" style={{ fontSize: '1.5rem' }} role="img" aria-label="shield">🛡️</span>
               Secure Contact Manager
             </span>
 
@@ -40,10 +40,11 @@ function App() {
                 className="btn btn-sm btn-outline-light me-3 fw-bold rounded-pill px-3 d-flex align-items-center"
                 style={{ transition: 'all 0.3s ease', textDecoration: 'none' }}
               >
-                <span className="me-1">👤</span> My Profile
+                <span className="me-1" role="img" aria-label="user profile">👤</span> My Profile
               </Link>
 
               <button
+                type="button"
                 className="btn btn-sm fw-bold text-white shadow d-flex align-items-center"
                 onClick={handleLogout}
                 style={{
@@ -54,7 +55,7 @@ function App() {
                   transition: 'all 0.3s ease'
                 }}
               >
-                Logout <span className="ms-1">🔒</span>
+                Logout <span className="ms-1" role="img" aria-label="lock">🔒</span>
               </button>
             </div>
           </div>

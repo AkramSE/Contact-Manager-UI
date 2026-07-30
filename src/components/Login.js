@@ -24,8 +24,6 @@ const Login = () => {
            if (response.data && response.data.token) {
                 localStorage.setItem("jwtToken", response.data.token);
                 localStorage.setItem("userId", response.data.id); 
-                
-                // Yeh nayi line add ki gayi hai taake Profile page par email dikhe
                 localStorage.setItem("email", email); 
 
                 setTimeout(() => {
@@ -128,16 +126,18 @@ const Login = () => {
                             />
                             <label htmlFor="floatingPassword" className="text-muted fw-medium" style={{ paddingLeft: '20px' }}>Password</label>
                             
-                            <span 
+                            <button 
+                                type="button"
                                 onClick={() => setShowPassword(!showPassword)}
                                 style={{ 
                                     position: 'absolute', right: '20px', top: '18px', 
                                     cursor: 'pointer', fontSize: '1.2rem', color: '#64748b',
-                                    userSelect: 'none'
+                                    userSelect: 'none', background: 'none', border: 'none'
                                 }}
+                                aria-label="Toggle password visibility"
                             >
                                 {showPassword ? "🙈" : "👁️"}
-                            </span>
+                            </button>
                         </div>
 
                         <button 
@@ -162,7 +162,6 @@ const Login = () => {
                             {isLoading ? 'AUTHENTICATING...' : 'SECURE LOGIN'}
                         </button>
 
-                        {/* Renders the link to the registration page. */}
                         <div className="text-center">
                             <span className="text-muted" style={{ fontSize: '0.95rem' }}>Don't have an account? </span>
                             <Link to="/register" className="fw-bold text-decoration-none" style={{ color: '#2a5298', fontSize: '0.95rem' }}>

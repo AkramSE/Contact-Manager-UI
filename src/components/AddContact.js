@@ -33,7 +33,6 @@ const AddContact = () => {
             const token = localStorage.getItem("jwtToken");
             const userId = localStorage.getItem("userId"); 
             
-            // Fixed field mapping to align with backend entity classes
             const formattedData = {
                 title: formData.title,
                 firstName: formData.firstName,
@@ -76,6 +75,7 @@ const AddContact = () => {
         <div className="mb-4">
             <div className="d-flex justify-content-end">
                 <button 
+                    type="button"
                     onClick={handleOpen} 
                     className="btn btn-primary shadow-sm fw-bold d-flex align-items-center px-4 py-2"
                     style={{ borderRadius: '10px', background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', border: 'none' }}
@@ -103,8 +103,8 @@ const AddContact = () => {
                                     <form onSubmit={handleSubmit}>
                                         <div className="row g-3">
                                             <div className="col-md-4">
-                                                <label className="form-label fw-semibold text-secondary small">Title</label>
-                                                <select className="form-select bg-light border-0 shadow-none" name="title" value={formData.title} onChange={handleChange}>
+                                                <label htmlFor="contactTitle" className="form-label fw-semibold text-secondary small">Title</label>
+                                                <select id="contactTitle" className="form-select bg-light border-0 shadow-none" name="title" value={formData.title} onChange={handleChange}>
                                                     <option value="">Select...</option>
                                                     <option value="Mr.">Mr.</option>
                                                     <option value="Ms.">Ms.</option>
@@ -113,23 +113,23 @@ const AddContact = () => {
                                             </div>
                                             
                                             <div className="col-md-4">
-                                                <label className="form-label fw-semibold text-secondary small">First Name *</label>
-                                                <input type="text" className="form-control bg-light border-0 shadow-none" name="firstName" value={formData.firstName} onChange={handleChange} required />
+                                                <label htmlFor="firstName" className="form-label fw-semibold text-secondary small">First Name *</label>
+                                                <input type="text" id="firstName" className="form-control bg-light border-0 shadow-none" name="firstName" value={formData.firstName} onChange={handleChange} required />
                                             </div>
 
                                             <div className="col-md-4">
-                                                <label className="form-label fw-semibold text-secondary small">Last Name *</label>
-                                                <input type="text" className="form-control bg-light border-0 shadow-none" name="lastName" value={formData.lastName} onChange={handleChange} required />
+                                                <label htmlFor="lastName" className="form-label fw-semibold text-secondary small">Last Name *</label>
+                                                <input type="text" id="lastName" className="form-control bg-light border-0 shadow-none" name="lastName" value={formData.lastName} onChange={handleChange} required />
                                             </div>
 
                                             <div className="col-md-6 mt-4">
-                                                <label className="form-label fw-semibold text-secondary small">Email Address *</label>
-                                                <input type="email" className="form-control bg-light border-0 shadow-none" name="email" value={formData.email} onChange={handleChange} required placeholder="e.g. work@example.com" />
+                                                <label htmlFor="emailAddress" className="form-label fw-semibold text-secondary small">Email Address *</label>
+                                                <input type="email" id="emailAddress" className="form-control bg-light border-0 shadow-none" name="email" value={formData.email} onChange={handleChange} required placeholder="e.g. work@example.com" />
                                             </div>
 
                                             <div className="col-md-6 mt-4">
-                                                <label className="form-label fw-semibold text-secondary small">Phone Number *</label>
-                                                <input type="tel" className="form-control bg-light border-0 shadow-none" name="phone" value={formData.phone} onChange={handleChange} required placeholder="e.g. 03001234567" />
+                                                <label htmlFor="phoneNumber" className="form-label fw-semibold text-secondary small">Phone Number *</label>
+                                                <input type="tel" id="phoneNumber" className="form-control bg-light border-0 shadow-none" name="phone" value={formData.phone} onChange={handleChange} required placeholder="e.g. 03001234567" />
                                             </div>
                                         </div>
 

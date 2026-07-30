@@ -4,7 +4,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const Register = () => {
-    // Redirects the user back to the login page.
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -15,7 +14,6 @@ const Register = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Generic handler for all input field changes.
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -23,7 +21,6 @@ const Register = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        // 1. Client-Side Validation: Password Match Check
         if (formData.password !== formData.confirmPassword) {
             Swal.fire('Oops...', 'Passwords do not match!', 'warning');
             return;
@@ -32,15 +29,13 @@ const Register = () => {
         setIsLoading(true);
 
         try {
-            // Sends the registration POST request to the backend API. 
             await axios.post('http://localhost:8080/users/register', {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,
-                role: 'USER' // Default role
+                role: 'USER' 
             });
 
-            // Displays a success alert and redirects the user to the login screen. 
             Swal.fire({
                 icon: 'success',
                 title: 'Welcome!',
@@ -51,7 +46,6 @@ const Register = () => {
             });
 
         } catch (error) {
-            // 3. Error Handling
             const errorMessage = error.response?.data?.message || 'Something went wrong. Email might already exist.';
             Swal.fire('Registration Failed!', errorMessage, 'error');
         } finally {
@@ -73,9 +67,10 @@ const Register = () => {
                             <form onSubmit={handleRegister}>
                                 {/* Name Input */}
                                 <div className="mb-3">
-                                    <label className="form-label fw-semibold text-secondary">Full Name</label>
+                                    <label htmlFor="registerName" className="form-label fw-semibold text-secondary">Full Name</label>
                                     <input 
                                         type="text" 
+                                        id="registerName"
                                         className="form-control form-control-lg bg-light border-0 shadow-none" 
                                         name="name"
                                         placeholder="e.g. Muhammad Akram" 
@@ -87,9 +82,10 @@ const Register = () => {
 
                                 {/* Email Input */}
                                 <div className="mb-3">
-                                    <label className="form-label fw-semibold text-secondary">Email Address</label>
+                                    <label htmlFor="registerEmail" className="form-label fw-semibold text-secondary">Email Address</label>
                                     <input 
                                         type="email" 
+                                        id="registerEmail"
                                         className="form-control form-control-lg bg-light border-0 shadow-none" 
                                         name="email"
                                         placeholder="name@example.com" 
@@ -101,9 +97,10 @@ const Register = () => {
 
                                 {/* Password Input */}
                                 <div className="mb-3">
-                                    <label className="form-label fw-semibold text-secondary">Password</label>
+                                    <label htmlFor="registerPassword" className="form-label fw-semibold text-secondary">Password</label>
                                     <input 
                                         type="password" 
+                                        id="registerPassword"
                                         className="form-control form-control-lg bg-light border-0 shadow-none" 
                                         name="password"
                                         placeholder="••••••••" 
@@ -116,9 +113,10 @@ const Register = () => {
 
                                 {/* Confirm Password Input */}
                                 <div className="mb-4">
-                                    <label className="form-label fw-semibold text-secondary">Confirm Password</label>
+                                    <label htmlFor="registerConfirmPassword" className="form-label fw-semibold text-secondary">Confirm Password</label>
                                     <input 
                                         type="password" 
+                                        id="registerConfirmPassword"
                                         className="form-control form-control-lg bg-light border-0 shadow-none" 
                                         name="confirmPassword"
                                         placeholder="••••••••" 

@@ -22,7 +22,7 @@ const UserProfile = () => {
             <nav className="navbar navbar-expand-lg shadow-sm mb-4" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', padding: '15px 0' }}>
               <div className="container">
                 <span className="navbar-brand fw-bold text-white d-flex align-items-center" style={{ letterSpacing: '1px' }}>
-                  <span className="me-2" style={{ fontSize: '1.5rem' }}>🛡️</span>
+                  <span className="me-2" style={{ fontSize: '1.5rem' }} role="img" aria-label="shield">🛡️</span>
                   Secure Contact Manager
                 </span>
                 <div className="d-flex align-items-center">
@@ -57,19 +57,21 @@ const UserProfile = () => {
                                 <hr className="mb-4" />
 
                                 <button 
+                                    type="button"
                                     onClick={() => setShowPasswordModal(true)}
                                     className="btn w-100 fw-bold mb-3 shadow-sm"
                                     style={{ borderRadius: '10px', border: '2px solid #2a5298', color: '#2a5298', height: '50px' }}
                                 >
-                                    🔑 Change Password
+                                    <span role="img" aria-label="key">🔑</span> Change Password
                                 </button>
 
                                 <button 
+                                    type="button"
                                     onClick={handleLogout}
                                     className="btn w-100 fw-bold shadow-sm"
                                     style={{ borderRadius: '10px', background: '#dc3545', color: 'white', height: '50px', border: 'none' }}
                                 >
-                                    Logout 🔒
+                                    Logout <span role="img" aria-label="lock">🔒</span>
                                 </button>
 
                             </div>

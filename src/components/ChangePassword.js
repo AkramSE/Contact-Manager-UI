@@ -63,12 +63,14 @@ const ChangePassword = ({ showModal, onClose }) => {
         <>
             <div className="modal-backdrop fade show" style={{ backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1040 }}></div>
             
-            <div className="modal fade show d-block" tabIndex="-1" role="dialog" style={{ zIndex: 1050 }}>
+            {/* Added aria-modal="true" and aria-labelledby for better accessibility, keeping role="dialog" as it's standard for Bootstrap */}
+            <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-modal="true" aria-labelledby="changePasswordModalTitle" style={{ zIndex: 1050 }}>
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content shadow-lg border-0 rounded-4">
                         
                         <div className="modal-header text-white rounded-top-4 py-3" style={{ background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)', borderBottom: 'none' }}>
-                            <h4 className="modal-title fw-bold m-0 d-flex align-items-center">
+                            {/* Added id to the title to link with aria-labelledby */}
+                            <h4 id="changePasswordModalTitle" className="modal-title fw-bold m-0 d-flex align-items-center">
                                 <span className="me-2">🔑</span> Change Password
                             </h4>
                             <button type="button" className="btn-close btn-close-white shadow-none" onClick={onClose} aria-label="Close"></button>
