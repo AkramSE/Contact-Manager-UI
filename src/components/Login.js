@@ -21,20 +21,26 @@ const Login = () => {
                 password: password
             });
 
-            // FIX: Sanitizing tainted data before writing to browser storage
-           if (response?.data?.token && typeof response.data.token === 'string') {
-                const cleanToken = String(response.data.token).replace(/[^a-zA-Z0-9\-_.]/g, '');
-                const cleanId = String(response.data.id).replace(/[^0-9]/g, '');
-                const cleanEmail = String(email).replace(/[^a-zA-Z0-9@.\-_]/g, '');
+            // STRICT Tainted Data Validation using Regex to satisfy SonarCloud
+            const receivedToken = response?.data?.token;
+            const receivedId = response?.data?.id;
 
-                localStorage.setItem("jwtToken", cleanToken);
-                localStorage.setItem("userId", cleanId); 
-                localStorage.setItem("email", cleanEmail); 
+            const isTokenSafe = typeof receivedToken === 'string' && /^[A-Za-z0-9\-_.]+$/.test(receivedToken);
+            const isIdSafe = typeof receivedId !== 'undefined' && /^[0-9]+$/.test(String(receivedId));
+            const isEmailSafe = typeof email === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+            if (isTokenSafe && isIdSafe && isEmailSafe) {
+                localStorage.setItem("jwtToken", receivedToken);
+                localStorage.setItem("userId", String(receivedId)); 
+                localStorage.setItem("email", email); 
 
                 setTimeout(() => {
                     window.location.href = "/";
                 }, 800);
+            } else {
+                throw new TypeError("Data validation failed for secure storage");
             }
+
         } catch (error) {
             console.error("Login failed", error);
             setErrorMsg("Invalid Credentials. Please check your email or password.");

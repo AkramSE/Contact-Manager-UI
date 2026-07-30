@@ -22,11 +22,12 @@ const ContactList = () => {
     const loadContacts = async (page = 0, size = 5, keyword = "") => {
         try {
             const currentToken = localStorage.getItem("jwtToken");
-            // Tainted Data Fix: Validate ID to ensure it's a number before passing to URL
             const storedUserId = localStorage.getItem("userId");
-            const currentUserId = parseInt(storedUserId, 10);
             
-            if (isNaN(currentUserId)) {
+            // FIX: Using Number.parseInt and Number.isNaN
+            const currentUserId = Number.parseInt(storedUserId, 10);
+            
+            if (Number.isNaN(currentUserId)) {
                 console.error("Invalid User ID");
                 return;
             }
@@ -63,14 +64,15 @@ const ContactList = () => {
         if (result.isConfirmed) {
             try {
                 const token = localStorage.getItem("jwtToken");
-                
-                // Tainted Data Fix: Validate both IDs to ensure they are numbers
                 const storedUserId = localStorage.getItem("userId");
-                const userId = parseInt(storedUserId, 10);
-                const safeContactId = parseInt(contactId, 10);
+                
+                // FIX: Using Number.parseInt and Number.isNaN
+                const userId = Number.parseInt(storedUserId, 10);
+                const safeContactId = Number.parseInt(contactId, 10);
 
-                if (isNaN(userId) || isNaN(safeContactId)) {
-                    throw new Error("Invalid ID for deletion");
+                if (Number.isNaN(userId) || Number.isNaN(safeContactId)) {
+                    // FIX: Using TypeError instead of generic Error
+                    throw new TypeError("Invalid ID for deletion");
                 }
 
                 await axios.delete(`http://localhost:8080/users/${userId}/contacts/${safeContactId}`, {
@@ -90,10 +92,13 @@ const ContactList = () => {
         try {
             const token = localStorage.getItem("jwtToken");
             const storedUserId = localStorage.getItem("userId");
-            const userId = parseInt(storedUserId, 10);
+            
+            // FIX: Using Number.parseInt and Number.isNaN
+            const userId = Number.parseInt(storedUserId, 10);
 
-            if (isNaN(userId)) {
-                throw new Error("Invalid User ID for export");
+            if (Number.isNaN(userId)) {
+                // FIX: Using TypeError
+                throw new TypeError("Invalid User ID for export");
             }
             
             const response = await axios.get(`http://localhost:8080/users/${userId}/contacts`, {
@@ -148,24 +153,25 @@ const ContactList = () => {
                 didOpen: () => { Swal.showLoading(); }
             });
 
-            // Modern FileReader Fix: Use Blob.text() instead of FileReader.readAsText()
             const text = await file.text();
             const rows = text.split('\n');
             let successCount = 0;
             
             const token = localStorage.getItem("jwtToken");
             const storedUserId = localStorage.getItem("userId");
-            const userId = parseInt(storedUserId, 10);
+            
+            // FIX: Using Number.parseInt and Number.isNaN
+            const userId = Number.parseInt(storedUserId, 10);
 
-            if (isNaN(userId)) {
-                throw new Error("Invalid User ID for import");
+            if (Number.isNaN(userId)) {
+                // FIX: Using TypeError
+                throw new TypeError("Invalid User ID for import");
             }
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i].trim();
                 if (!row) continue;
                 
-                // ReplaceAll Fix: Use replaceAll instead of regex replace
                 const cols = row.replaceAll('"', '').split(',');
                 
                 if (cols.length >= 5) {
