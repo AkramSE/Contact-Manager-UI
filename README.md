@@ -4,19 +4,14 @@
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-7952B3?style=for-the-badge&logo=bootstrap)
 ![Axios](https://img.shields.io/badge/Axios-HTTP_Client-5A29E4?style=for-the-badge)
 ![React Router](https://img.shields.io/badge/React_Router-v6-CA4245?style=for-the-badge&logo=reactrouter)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript) 
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript)
+![SonarCloud](https://img.shields.io/badge/SonarCloud-100%25_Passed-success?style=for-the-badge&logo=sonarcloud)
+![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge)
+![Security](https://img.shields.io/badge/Security-JWT-blue?style=for-the-badge&logo=jsonwebtokens)
 
-(https://img.shields.io/badge/SonarCloud-100%25_Passed-success.svg?style=for-the-badge&logo=sonarcloud)  
+---
 
-![License] 
-![Security] 
-
-
-
-> A production-ready, enterprise-grade frontend application engineered with **React** and **Bootstrap 5**. Designed with a focus on clean architecture, seamless user experience (UX), and strict security standards. This client-side application successfully achieved a **100% Passed Quality Gate on SonarCloud**, guaranteeing zero vulnerabilities, zero code smells, and robust defense against XSS and Tainted Data injections.
-(https://img.shields.io/badge/License-
-
-MIT-success?style=for-the-badge)
+> A production-ready, enterprise-grade frontend application engineered with **React** and **Bootstrap 5**. Designed with a focus on clean architecture, seamless user experience (UX), and modern frontend development practices. It integrates seamlessly with the Spring Boot Enterprise REST API while providing secure authentication, responsive design, reusable components, and efficient REST API communication.
 
 ---
 
@@ -24,7 +19,7 @@ MIT-success?style=for-the-badge)
 
 **Contact Manager - Enterprise React UI** is a modern, responsive frontend application built with **React 18** and **Bootstrap 5**.
 
-The application provides an intuitive user experience for managing contacts while integrating seamlessly with the Spring Boot Enterprise REST API. It follows modern frontend development practices including reusable components, clean architecture, secure authentication, responsive design, and efficient REST API communication.
+The application enables users to securely manage contacts through an intuitive interface while communicating with the Spring Boot Enterprise REST API.
 
 ---
 
@@ -70,12 +65,12 @@ src/
 │
 ├── assets/
 ├── components/
-├── pages/
-├── services/
 ├── context/
 ├── hooks/
-├── utils/
+├── pages/
 ├── routes/
+├── services/
+├── utils/
 ├── App.js
 └── index.js
 ```
@@ -87,7 +82,7 @@ src/
 ## 🔐 Authentication
 
 - JWT Authentication
-- Login & Registration
+- User Login & Registration
 - Protected Routes
 - Secure Token Storage
 - Logout Support
@@ -101,7 +96,7 @@ src/
 - Delete Contact
 - View Contact Details
 - Search Contacts
-- Pagination
+- Pagination Support
 
 ---
 
@@ -109,7 +104,8 @@ src/
 
 - Import Contacts
 - Export Contacts
-- Validation Before Upload
+- File Validation
+- Bulk Data Processing
 
 ---
 
@@ -119,7 +115,7 @@ src/
 - Glassmorphism Design
 - Mobile Responsive
 - Clean Layout
-- Modern Dashboard
+- Interactive Dashboard
 
 ---
 
@@ -133,7 +129,7 @@ https://github.com/AkramSE/Contact-Manager-API
 
 ---
 
-# ⚙ Installation
+# ⚙️ Installation
 
 ## Clone Repository
 
@@ -160,7 +156,7 @@ npm start
 
 ---
 
-## Production Build
+## Build for Production
 
 ```bash
 npm run build
@@ -170,33 +166,28 @@ npm run build
 
 # 🔄 API Communication
 
-The application communicates with the backend using Axios.
-
-Example:
+Example API Call
 
 ```javascript
 axios.get("/api/contacts");
 ```
 
-Features include:
+### Features
 
 - Authorization Header
-- JWT Token
-- Request Interceptors
-- Response Interceptors
+- JWT Token Support
+- Axios Interceptors
 - Global Error Handling
+- RESTful API Communication
 
 ---
 
 # 📱 Responsive Design
 
-✔ Desktop
-
-✔ Laptop
-
-✔ Tablet
-
-✔ Mobile
+- ✅ Desktop
+- ✅ Laptop
+- ✅ Tablet
+- ✅ Mobile
 
 ---
 
@@ -217,22 +208,22 @@ Features include:
 - Dark Mode
 - Email Verification
 - Forgot Password
-- Image Upload
+- Profile Image Upload
 - Two-Factor Authentication
-- PWA Support
+- Progressive Web App (PWA)
 - Docker Deployment
 
 ---
 
 # 🤝 Contributing
 
-Contributions are welcome.
+Contributions are welcome!
 
-1. Fork Repository
-2. Create Feature Branch
-3. Commit Changes
-4. Push Branch
-5. Create Pull Request
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push the branch
+5. Open a Pull Request
 
 ---
 
@@ -275,5 +266,5 @@ This project is licensed under the MIT License.
 ---
 
 <p align="center">
-Made with ❤️ using React, Bootstrap, JavaScript and REST APIs
+Made with ❤️ using <strong>React</strong>, <strong>Bootstrap 5</strong>, <strong>JavaScript</strong>, and <strong>REST APIs</strong>.
 </p>
