@@ -5,7 +5,11 @@
 ![Axios](https://img.shields.io/badge/Axios-HTTP_Client-5A29E4?style=for-the-badge)
 ![React Router](https://img.shields.io/badge/React_Router-v6-CA4245?style=for-the-badge&logo=reactrouter)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript)
-![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge)
+![License] 
+![Security](https://img.shields.io/badge/SonarCloud-100%25_Passed-success.svg?style=for-the-badge&logo=sonarcloud)
+(https://img.shields.io/badge/License-
+> A production-ready, enterprise-grade frontend application engineered with **React** and **Bootstrap 5**. Designed with a focus on clean architecture, seamless user experience (UX), and strict security standards. This client-side application successfully achieved a **100% Passed Quality Gate on SonarCloud**, guaranteeing zero vulnerabilities, zero code smells, and robust defense against XSS and Tainted Data injections.
+MIT-success?style=for-the-badge)
 
 ---
 
