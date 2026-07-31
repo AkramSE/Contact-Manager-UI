@@ -1,54 +1,42 @@
-# 📱 Contact Manager - React Frontend Client
+# 💻 Contact Manager - React Frontend UI
 
-![React](https://img.shields.io/badge/React-18.x-61DAFB.svg?logo=react)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-7952B3.svg?logo=bootstrap)
-![Axios](https://img.shields.io/badge/Axios-HTTP_Client-blue.svg)
-![SweetAlert2](https://img.shields.io/badge/SweetAlert2-Popups-FF0000.svg)
+![React](https://img.shields.io/badge/React-18.x-61DAFB.svg?style=for-the-badge&logo=react)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-7952B3.svg?style=for-the-badge&logo=bootstrap)
+![Axios](https://img.shields.io/badge/Axios-HTTP_Client-5A29E4.svg?style=for-the-badge&logo=axios)
+![Code Quality](https://img.shields.io/badge/SonarCloud-100%25_Passed-success.svg?style=for-the-badge&logo=sonarcloud)
 
-A modern, responsive, and fully functional Single Page Application (SPA) built with **React**. This serves as the interactive client-side interface for the Contact Manager system, seamlessly communicating with the secure [Spring Boot REST API](https://github.com/AkramSE/Contact-Manager-API.git) to handle user data operations with enterprise-level UI/UX standards.
+> A modern, fully responsive, and highly secure frontend application built with **React**. Designed with enterprise-grade coding standards, this UI seamlessly integrates with a Spring Boot REST API. It boasts a **100% Passed Quality Gate on SonarCloud**, ensuring zero vulnerabilities, no code smells, and strict data sanitization protocols.
 
-## 🎨 Live Demo / Screenshots
+---
 
-*(Replace the placeholder below with an actual screenshot of your beautiful paginated table and modals)*
-> `![Dashboard UI](./screenshot.png)`
+## ✨ Core Features
 
-## ✨ Key Features
+*   **🛡️ Secure Authentication Flow:** Complete Login, Registration, and Password management interfaces with robust client-side validation and secure token handling (Base64 encoding).
+*   **📊 Dynamic Contact Management:** Interactive dashboard to Add, View, Edit, and Delete contacts in real-time.
+*   **🔍 Advanced Search & Pagination:** Client-side integration for fast searching and seamless pagination of contact lists.
+*   **📥 CSV Import/Export:** Built-in functionality to export user contacts to a CSV file or bulk-import new contacts seamlessly.
+*   **🎨 Premium UI/UX:** Styled using Bootstrap 5 and custom CSS for a modern, glass-morphism aesthetic that is fully responsive across all devices.
+*   **🔔 Interactive Alerts:** Integrated `SweetAlert2` for beautiful, user-friendly notifications and confirmation dialogs.
+*   **🔒 Strict Security Compliance:** Codebase rigorously sanitized to prevent XSS and Tainted Data vulnerabilities, fully verified by SonarCloud static analysis.
 
-*   **🔐 Secure User Sessions:** Fully functional Login and Registration screens with JWT token management stored securely in local storage.
-*   **📊 Paginated Data Tables:** Effortlessly display large datasets with server-side pagination, ensuring fast load times and a clean interface.
-*   **🔍 Real-Time Search Filtering:** Instantly search and filter contact lists by name using dynamic state management and efficient API querying.
-*   **🪟 Premium Modals for CRUD:** Create and Update operations are handled through beautiful, highly responsive, and centered overlay Modals, providing a seamless user experience without page reloads.
-*   **⚡ Asynchronous API Calls:** Robust integration with secured backend endpoints using `Axios` interceptors and modern `async/await` syntax.
-*   **📱 Responsive Design:** Mobile-first, sleek user interface powered by **Bootstrap 5**.
-*   **🔔 Interactive Feedback:** Professional success alerts and confirmation dialogs for critical actions (like deleting a contact) integrated via **SweetAlert2**.
+---
 
 ## 🛠️ Technical Stack
 
-*   **Frontend Framework:** React.js
-*   **Styling & UI:** Bootstrap 5 / Custom CSS
-*   **HTTP Client:** Axios
-*   **Alerts & Modals:** SweetAlert2
-*   **State Management:** React Hooks (`useState`, `useEffect`)
-*   **Development Environment:** Node.js & npm
+| Category | Technology |
+| :--- | :--- |
+| **Library** | React (Hooks, Context, Functional Components) |
+| **Styling** | Bootstrap 5, Custom CSS |
+| **Routing** | React Router DOM |
+| **HTTP Client** | Axios (with Interceptors capability) |
+| **Alerts/UI** | SweetAlert2 |
+| **Code Quality** | SonarCloud (Zero Vulnerabilities) |
 
-## 📁 Architecture & Folder Structure
+---
 
-```text
-src/
- ├── components/       
- │    ├── ContactList.js     # Main Dashboard with Pagination & Search
- │    ├── AddContact.js      # Modal Form for Creating Contacts
- │    ├── EditContact.js     # Modal Form for Updating Contacts
- │    ├── Login.js           # Authentication Entry
- │    ├── Register.js        # User Onboarding
- │    └── UserProfile.js     # Profile Management & Password Change
- ├── App.js            # Main Router & Layout Configuration
- ├── index.js          # React DOM Rendering
- └── App.css           # Global Custom Styles 
+## ⚙️ Quick Start & Installation
 
- 🔗 Links & Let's Connect
-⚙️ Backend API: Contact Manager API Repository
-https://github.com/AkramSE/Contact-Manager-API.git
-
-💼 LinkedIn:  Let's connect on LinkedIn!
- https://linkedin.com/in/muhammad-akram-se
+**1. Clone the repository**
+```bash
+git clone [https://github.com/AkramSE/Contact-Manager-UI.git](https://github.com/AkramSE/Contact-Manager-UI.git)
+cd Contact-Manager-UI
