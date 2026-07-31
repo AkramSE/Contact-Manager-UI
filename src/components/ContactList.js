@@ -16,7 +16,8 @@ const ContactList = () => {
     const fileInputRef = useRef(null);
 
     useEffect(() => {
-        loadContacts(currentPage, pageSize, searchTerm);
+        loadContacts(currentPage, pageSize, searchTerm); 
+        // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [currentPage, pageSize, searchTerm]);
 
     // Helper function to get and decode auth data safely
