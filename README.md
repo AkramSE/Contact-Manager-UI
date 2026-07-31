@@ -8,7 +8,7 @@
 ![License] 
 ![Security](https://img.shields.io/badge/SonarCloud-100%25_Passed-success.svg?style=for-the-badge&logo=sonarcloud)
 (https://img.shields.io/badge/License-
-> A production-ready, enterprise-grade frontend application engineered with **React** and **Bootstrap 5**. Designed with a focus on clean architecture, seamless user experience (UX), and strict security standards. This client-side application successfully achieved a **100% Passed Quality Gate on SonarCloud**, guaranteeing zero vulnerabilities, zero code smells, and robust defense against XSS and Tainted Data injections.
+
 MIT-success?style=for-the-badge)
 
 ---
