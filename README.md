@@ -1,54 +1,270 @@
-# 📱 Contact Manager - React Frontend Client
+# 💻 Contact Manager - Enterprise React UI
 
-![React](https://img.shields.io/badge/React-18.x-61DAFB.svg?logo=react)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-7952B3.svg?logo=bootstrap)
-![Axios](https://img.shields.io/badge/Axios-HTTP_Client-blue.svg)
-![SweetAlert2](https://img.shields.io/badge/SweetAlert2-Popups-FF0000.svg)
+![React](https://img.shields.io/badge/React-18.x-61DAFB?style=for-the-badge&logo=react)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-7952B3?style=for-the-badge&logo=bootstrap)
+![Axios](https://img.shields.io/badge/Axios-HTTP_Client-5A29E4?style=for-the-badge)
+![React Router](https://img.shields.io/badge/React_Router-v6-CA4245?style=for-the-badge&logo=reactrouter)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?style=for-the-badge&logo=javascript)
+![SonarCloud](https://img.shields.io/badge/SonarCloud-100%25_Passed-success?style=for-the-badge&logo=sonarcloud)
+![License](https://img.shields.io/badge/License-MIT-success?style=for-the-badge)
+![Security](https://img.shields.io/badge/Security-JWT-blue?style=for-the-badge&logo=jsonwebtokens)
 
-A modern, responsive, and fully functional Single Page Application (SPA) built with **React**. This serves as the interactive client-side interface for the Contact Manager system, seamlessly communicating with the secure [Spring Boot REST API](https://github.com/AkramSE/Contact-Manager-API.git) to handle user data operations with enterprise-level UI/UX standards.
+---
 
-## 🎨 Live Demo / Screenshots
+> A production-ready, enterprise-grade frontend application engineered with **React** and **Bootstrap 5**. Designed with a focus on clean architecture, seamless user experience (UX), and modern frontend development practices. It integrates seamlessly with the Spring Boot Enterprise REST API while providing secure authentication, responsive design, reusable components, and efficient REST API communication.
 
-*(Replace the placeholder below with an actual screenshot of your beautiful paginated table and modals)*
-> `![Dashboard UI](./screenshot.png)`
+---
 
-## ✨ Key Features
+# 🚀 Overview
 
-*   **🔐 Secure User Sessions:** Fully functional Login and Registration screens with JWT token management stored securely in local storage.
-*   **📊 Paginated Data Tables:** Effortlessly display large datasets with server-side pagination, ensuring fast load times and a clean interface.
-*   **🔍 Real-Time Search Filtering:** Instantly search and filter contact lists by name using dynamic state management and efficient API querying.
-*   **🪟 Premium Modals for CRUD:** Create and Update operations are handled through beautiful, highly responsive, and centered overlay Modals, providing a seamless user experience without page reloads.
-*   **⚡ Asynchronous API Calls:** Robust integration with secured backend endpoints using `Axios` interceptors and modern `async/await` syntax.
-*   **📱 Responsive Design:** Mobile-first, sleek user interface powered by **Bootstrap 5**.
-*   **🔔 Interactive Feedback:** Professional success alerts and confirmation dialogs for critical actions (like deleting a contact) integrated via **SweetAlert2**.
+**Contact Manager - Enterprise React UI** is a modern, responsive frontend application built with **React 18** and **Bootstrap 5**.
 
-## 🛠️ Technical Stack
+The application enables users to securely manage contacts through an intuitive interface while communicating with the Spring Boot Enterprise REST API.
 
-*   **Frontend Framework:** React.js
-*   **Styling & UI:** Bootstrap 5 / Custom CSS
-*   **HTTP Client:** Axios
-*   **Alerts & Modals:** SweetAlert2
-*   **State Management:** React Hooks (`useState`, `useEffect`)
-*   **Development Environment:** Node.js & npm
+---
 
-## 📁 Architecture & Folder Structure
+# ✨ Key Features
+
+- 🔐 Secure User Authentication
+- 👤 User Registration & Login
+- 📇 Contact Management (CRUD)
+- 🔍 Real-time Search
+- 📄 Pagination
+- 📤 CSV Export
+- 📥 CSV Import
+- 🎨 Modern Glassmorphism UI
+- 📱 Fully Responsive Design
+- ⚡ Fast REST API Integration
+- 🔔 SweetAlert2 Notifications
+- 🧩 Reusable React Components
+- 🔄 Axios Interceptors
+- 🛡 Protected Routes
+- 🧹 Clean Project Structure
+
+---
+
+# 🛠 Technology Stack
+
+| Category | Technology |
+|-----------|------------|
+| Frontend | React 18 |
+| Styling | Bootstrap 5 |
+| Language | JavaScript (ES6+) |
+| Routing | React Router DOM v6 |
+| HTTP Client | Axios |
+| Alerts | SweetAlert2 |
+| Icons | React Icons |
+| State Management | React Hooks & Context API |
+
+---
+
+# 📂 Project Structure
 
 ```text
 src/
- ├── components/       
- │    ├── ContactList.js     # Main Dashboard with Pagination & Search
- │    ├── AddContact.js      # Modal Form for Creating Contacts
- │    ├── EditContact.js     # Modal Form for Updating Contacts
- │    ├── Login.js           # Authentication Entry
- │    ├── Register.js        # User Onboarding
- │    └── UserProfile.js     # Profile Management & Password Change
- ├── App.js            # Main Router & Layout Configuration
- ├── index.js          # React DOM Rendering
- └── App.css           # Global Custom Styles 
+│
+├── assets/
+├── components/
+├── context/
+├── hooks/
+├── pages/
+├── routes/
+├── services/
+├── utils/
+├── App.js
+└── index.js
+```
 
- 🔗 Links & Let's Connect
-⚙️ Backend API: Contact Manager API Repository
-https://github.com/AkramSE/Contact-Manager-API.git
+---
 
-💼 LinkedIn:  Let's connect on LinkedIn!
- https://linkedin.com/in/muhammad-akram-se
+# 🎯 Features Explained
+
+## 🔐 Authentication
+
+- JWT Authentication
+- User Login & Registration
+- Protected Routes
+- Secure Token Storage
+- Logout Support
+
+---
+
+## 📇 Contact Management
+
+- Create Contact
+- Update Contact
+- Delete Contact
+- View Contact Details
+- Search Contacts
+- Pagination Support
+
+---
+
+## 📥 CSV Operations
+
+- Import Contacts
+- Export Contacts
+- File Validation
+- Bulk Data Processing
+
+---
+
+## 🎨 User Interface
+
+- Bootstrap 5
+- Glassmorphism Design
+- Mobile Responsive
+- Clean Layout
+- Interactive Dashboard
+
+---
+
+# 🌐 Backend Integration
+
+The frontend communicates with the Spring Boot Enterprise REST API using Axios.
+
+### Backend Repository
+
+https://github.com/AkramSE/Contact-Manager-API
+
+---
+
+# ⚙️ Installation
+
+## Clone Repository
+
+```bash
+git clone https://github.com/AkramSE/Contact-Manager-UI.git
+cd Contact-Manager-UI
+```
+
+---
+
+## Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+## Run Development Server
+
+```bash
+npm start
+```
+
+---
+
+## Build for Production
+
+```bash
+npm run build
+```
+
+---
+
+# 🔄 API Communication
+
+Example API Call
+
+```javascript
+axios.get("/api/contacts");
+```
+
+### Features
+
+- Authorization Header
+- JWT Token Support
+- Axios Interceptors
+- Global Error Handling
+- RESTful API Communication
+
+---
+
+# 📱 Responsive Design
+
+- ✅ Desktop
+- ✅ Laptop
+- ✅ Tablet
+- ✅ Mobile
+
+---
+
+# 🔒 Security Features
+
+- JWT Authentication
+- Protected Routes
+- Secure API Requests
+- Input Validation
+- Authentication Guards
+- Error Handling
+
+---
+
+# 🚀 Future Improvements
+
+- Profile Management
+- Dark Mode
+- Email Verification
+- Forgot Password
+- Profile Image Upload
+- Two-Factor Authentication
+- Progressive Web App (PWA)
+- Docker Deployment
+
+---
+
+# 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push the branch
+5. Open a Pull Request
+
+---
+
+# 👨‍💻 Developer
+
+## Muhammad Akram
+
+### GitHub
+
+https://github.com/AkramSE
+
+### LinkedIn
+
+https://linkedin.com/in/muhammad-akram-se
+
+---
+
+# 🔗 Project Links
+
+## Frontend Repository
+
+https://github.com/AkramSE/Contact-Manager-UI
+
+## Backend Repository
+
+https://github.com/AkramSE/Contact-Manager-API
+
+---
+
+# ⭐ Support
+
+If you found this project helpful, consider giving it a ⭐ on GitHub.
+
+---
+
+# 📜 License
+
+This project is licensed under the MIT License.
+
+---
+
+<p align="center">
+Made with ❤️ using <strong>React</strong>, <strong>Bootstrap 5</strong>, <strong>JavaScript</strong>, and <strong>REST APIs</strong>.
+</p>
