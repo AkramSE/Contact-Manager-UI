@@ -48,7 +48,7 @@ const AddContact = () => {
                 ]
             };
 
-            await axios.post(`http://localhost:8080/users/${userId}/contacts`, formattedData, {
+            await axios.post(`https://contact-manager-api-production-0aa6.up.railway.app/users/${userId}/contacts`, formattedData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

@@ -56,7 +56,7 @@ const EditContact = ({ contactToEdit, onUpdateSuccess, onCancel }) => {
             const token = rawToken ? atob(rawToken) : "";
             const userId = rawUserId ? atob(rawUserId) : "";
 
-            await axios.put(`http://localhost:8080/users/${userId}/contacts/${contactToEdit.id}`, updatedContact, {
+            await axios.put(`https://contact-manager-api-production-0aa6.up.railway.app/users/${userId}/contacts/${contactToEdit.id}`, updatedContact, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

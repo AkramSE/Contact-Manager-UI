@@ -38,7 +38,7 @@ const ContactList = () => {
                 return;
             }
 
-            const result = await axios.get(`http://localhost:8080/users/${currentUserId}/contacts`, {
+            const result = await axios.get(`https://contact-manager-api-production-0aa6.up.railway.app/users/${currentUserId}/contacts`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 },
@@ -77,7 +77,7 @@ const ContactList = () => {
                     throw new TypeError("Invalid ID for deletion");
                 }
 
-                await axios.delete(`http://localhost:8080/users/${parsedUserId}/contacts/${safeContactId}`, {
+                await axios.delete(`https://contact-manager-api-production-0aa6.up.railway.app/users/${parsedUserId}/contacts/${safeContactId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 
@@ -99,7 +99,7 @@ const ContactList = () => {
                 throw new TypeError("Invalid User ID for export");
             }
             
-            const response = await axios.get(`http://localhost:8080/users/${parsedUserId}/contacts`, {
+            const response = await axios.get(`https://contact-manager-api-production-0aa6.up.railway.app/users/${parsedUserId}/contacts`, {
                 headers: { 'Authorization': `Bearer ${token}` },
                 params: {
                     page: 0,
@@ -178,7 +178,7 @@ const ContactList = () => {
                     };
                     
                     try {
-                        await axios.post(`http://localhost:8080/users/${parsedUserId}/contacts`, newContact, {
+                        await axios.post(`https://contact-manager-api-production-0aa6.up.railway.app/users/${parsedUserId}/contacts`, newContact, {
                             headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
                         });
                         successCount++;

@@ -29,7 +29,7 @@ const ChangePassword = ({ showModal, onClose }) => {
             const token = rawToken ? atob(rawToken) : "";
             const userId = rawUserId ? atob(rawUserId) : "";
 
-            await axios.put(`http://localhost:8080/users/${userId}/change-password`, 
+            await axios.put(`https://contact-manager-api-production-0aa6.up.railway.app/users/${userId}/change-password`, 
             {
                 oldPassword: oldPassword,
                 newPassword: newPassword
