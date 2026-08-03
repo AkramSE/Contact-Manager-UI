@@ -1034,53 +1034,16 @@ Supports all modern browsers.
 
 # 📸 Application Screenshots
 
-> Replace these placeholders with actual screenshots.
+### Login
+![Login Screen](login.jpg)
 
-## Login
+### Register
+![Register Screen](register.jpg)
 
-```text
-docs/screenshots/login.png
-```
-
----
-
-## Register
-
-```text
-docs/screenshots/register.png
-```
+### Dashboard
+![Dashboard Screen](dashboard.jpg)
 
 ---
-
-## Dashboard
-
-```text
-docs/screenshots/dashboard.png
-```
-
----
-
-## Contacts
-
-```text
-docs/screenshots/contacts.png
-```
-
----
-
-## Add Contact
-
-```text
-docs/screenshots/add-contact.png
-```
-
----
-
-## Edit Contact
-
-```text
-docs/screenshots/edit-contact.png
-```
 
 ---
 
