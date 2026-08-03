@@ -369,31 +369,12 @@ SpringBoot-->>React: Response
 ```mermaid
 flowchart LR
 
-Component
-
--->
-
-Axios
-
--->
-
-Interceptor
-
--->
-
-JWT Token
-
--->
-
-Railway API
-
--->
-
-Spring Boot
-
--->
-
-MySQL
+A[React Component] --> B[Axios Instance]
+B --> C[Request Interceptor]
+C --> D[JWT Token]
+D --> E[Railway API]
+E --> F[Spring Boot]
+F --> G[(Aiven MySQL)]
 ```
 
 ---
@@ -403,31 +384,12 @@ MySQL
 ```mermaid
 flowchart TD
 
-Component
-
--->
-
-Axios Instance
-
--->
-
-Request Interceptor
-
--->
-
-JWT Token
-
--->
-
-Backend API
-
--->
-
-Response Interceptor
-
--->
-
-React Component
+A[React Component] --> B[Axios Instance]
+B --> C[Request Interceptor]
+C --> D[JWT Token]
+D --> E[Backend API]
+E --> F[Response Interceptor]
+F --> G[React Component]
 ```
 
 ---
