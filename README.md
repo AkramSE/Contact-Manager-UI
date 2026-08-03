@@ -650,35 +650,13 @@ https://contact-manager-api-production-0aa6.up.railway.app
 ```mermaid
 flowchart LR
 
-Developer
-
--->
-
-GitHub
-
--->
-
-Vercel
-
--->
-
-React Application
-
--->
-
-HTTPS
-
--->
-
-Railway
-
--->
-
-Spring Boot API
-
--->
-
-Aiven MySQL
+A[Developer] --> B[GitHub]
+B --> C[Vercel]
+C --> D[React Application]
+D --> E[HTTPS]
+E --> F[Railway]
+F --> G[Spring Boot API]
+G --> H[Aiven MySQL]
 ```
 
 ---
@@ -688,31 +666,12 @@ Aiven MySQL
 ```mermaid
 flowchart TD
 
-Developer
-
--->
-
-Git Push
-
--->
-
-GitHub Repository
-
--->
-
-Vercel Build
-
--->
-
-React Production Build
-
--->
-
-Deploy
-
--->
-
-Users
+A[Developer] --> B[Git Push]
+B --> C[GitHub Repository]
+C --> D[Vercel Build]
+D --> E[React Production Build]
+E --> F[Deploy]
+F --> G[Users]
 ```
 
 ---
