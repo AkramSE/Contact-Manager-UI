@@ -29,7 +29,8 @@ const Register = () => {
         setIsLoading(true);
 
         try {
-            await axios.post('https://contact-manager-api-production-0aa6.up.railway.app/users/register', {
+            await axios.post('https://contact-manager-api-production-7c6f.up.railway.app/users/register', {
+                
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,
